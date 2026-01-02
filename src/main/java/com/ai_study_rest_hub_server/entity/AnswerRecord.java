@@ -14,11 +14,6 @@ import lombok.Data;
 @TableName(value ="answer_record")
 @Data
 public class AnswerRecord extends BaseEntity{
-    /**
-     * 
-     */
-    @TableId(type = IdType.AUTO)
-    private Integer id;
 
     /**
      * 
@@ -50,20 +45,6 @@ public class AnswerRecord extends BaseEntity{
      */
     private String aiCorrection;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    /**
-     * 0-未删除，1-已删除
-     */
-    private Integer isDeleted;
 
     @Override
     public boolean equals(Object that) {
@@ -112,16 +93,12 @@ public class AnswerRecord extends BaseEntity{
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
         sb.append(", examRecordId=").append(examRecordId);
         sb.append(", questionId=").append(questionId);
         sb.append(", userAnswer=").append(userAnswer);
         sb.append(", score=").append(score);
         sb.append(", isCorrect=").append(isCorrect);
         sb.append(", aiCorrection=").append(aiCorrection);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", isDeleted=").append(isDeleted);
         sb.append("]");
         return sb.toString();
     }

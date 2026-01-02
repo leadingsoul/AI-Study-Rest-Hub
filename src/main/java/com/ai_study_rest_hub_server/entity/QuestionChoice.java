@@ -13,11 +13,6 @@ import lombok.Data;
 @TableName(value ="question_choices")
 @Data
 public class QuestionChoice extends BaseEntity{
-    /**
-     * 
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
 
     /**
      * 
@@ -38,21 +33,6 @@ public class QuestionChoice extends BaseEntity{
      * 
      */
     private Integer sort;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    /**
-     * 0-未删除，1-已删除
-     */
-    private Integer isDeleted;
 
     @Override
     public boolean equals(Object that) {
@@ -97,14 +77,10 @@ public class QuestionChoice extends BaseEntity{
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
         sb.append(", questionId=").append(questionId);
         sb.append(", content=").append(content);
         sb.append(", isCorrect=").append(isCorrect);
         sb.append(", sort=").append(sort);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", isDeleted=").append(isDeleted);
         sb.append("]");
         return sb.toString();
     }

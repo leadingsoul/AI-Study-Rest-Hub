@@ -13,11 +13,6 @@ import lombok.Data;
 @TableName(value ="guess_topics")
 @Data
 public class GuessTopic extends BaseEntity{
-    /**
-     *  猜题题目 ID，主键 
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
 
     /**
      *  猜词题目名称 
@@ -48,21 +43,6 @@ public class GuessTopic extends BaseEntity{
      *  目标词 
      */
     private String target;
-
-    /**
-     *  创建时间 
-     */
-    private Date createTime;
-
-    /**
-     *  更新时间 
-     */
-    private Date updateTime;
-
-    /**
-     * 0 - 未删除，1 - 已删除 
-     */
-    private Integer isDeleted;
 
     @Override
     public boolean equals(Object that) {
@@ -111,16 +91,12 @@ public class GuessTopic extends BaseEntity{
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
         sb.append(", topicName=").append(topicName);
         sb.append(", topicDescription=").append(topicDescription);
         sb.append(", categoryId=").append(categoryId);
         sb.append(", recordCount=").append(recordCount);
         sb.append(", difficulty=").append(difficulty);
         sb.append(", target=").append(target);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", isDeleted=").append(isDeleted);
         sb.append("]");
         return sb.toString();
     }

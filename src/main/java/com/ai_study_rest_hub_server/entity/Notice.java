@@ -13,11 +13,6 @@ import lombok.Data;
 @TableName(value ="notices")
 @Data
 public class Notice extends BaseEntity{
-    /**
-     * 公告ID
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
 
     /**
      * 公告标题
@@ -42,22 +37,8 @@ public class Notice extends BaseEntity{
     /**
      * 是否启用
      */
-    private Integer isActive;
+    private boolean isActive;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    /**
-     * 0-未删除，1-已删除
-     */
-    private Integer isDeleted;
 
     @Override
     public boolean equals(Object that) {
@@ -76,7 +57,6 @@ public class Notice extends BaseEntity{
             && (this.getContent() == null ? other.getContent() == null : this.getContent().equals(other.getContent()))
             && (this.getType() == null ? other.getType() == null : this.getType().equals(other.getType()))
             && (this.getPriority() == null ? other.getPriority() == null : this.getPriority().equals(other.getPriority()))
-            && (this.getIsActive() == null ? other.getIsActive() == null : this.getIsActive().equals(other.getIsActive()))
             && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
             && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
             && (this.getIsDeleted() == null ? other.getIsDeleted() == null : this.getIsDeleted().equals(other.getIsDeleted()));
@@ -91,7 +71,6 @@ public class Notice extends BaseEntity{
         result = prime * result + ((getContent() == null) ? 0 : getContent().hashCode());
         result = prime * result + ((getType() == null) ? 0 : getType().hashCode());
         result = prime * result + ((getPriority() == null) ? 0 : getPriority().hashCode());
-        result = prime * result + ((getIsActive() == null) ? 0 : getIsActive().hashCode());
         result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
         result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
         result = prime * result + ((getIsDeleted() == null) ? 0 : getIsDeleted().hashCode());
@@ -104,15 +83,11 @@ public class Notice extends BaseEntity{
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
         sb.append(", title=").append(title);
         sb.append(", content=").append(content);
         sb.append(", type=").append(type);
         sb.append(", priority=").append(priority);
         sb.append(", isActive=").append(isActive);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", isDeleted=").append(isDeleted);
         sb.append("]");
         return sb.toString();
     }

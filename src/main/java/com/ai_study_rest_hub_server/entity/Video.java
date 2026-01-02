@@ -1,9 +1,14 @@
 package com.ai_study_rest_hub_server.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.time.LocalDateTime;
 import java.util.Date;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
@@ -12,7 +17,7 @@ import lombok.Data;
  */
 @TableName(value ="videos")
 @Data
-public class Video extends BaseEntity{
+public class Video {
     /**
      * 视频ID
      */
@@ -87,7 +92,8 @@ public class Video extends BaseEntity{
     /**
      * 审核时间
      */
-    private Date auditTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime auditTime;
 
     /**
      * 审核原因（拒绝时）
@@ -112,12 +118,43 @@ public class Video extends BaseEntity{
     /**
      * 创建时间
      */
-    private Date createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
-    private Date updatedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updatedAt;
+
+    @TableField(exist = false)
+    private String categoryName;
+
+    @TableField(exist = false)
+    private String uploaderTypeText;
+
+    @TableField(exist = false)
+    private String statusText;
+
+    @TableField(exist = false)
+    private String auditAdminName;
+
+    @TableField(exist = false)
+    private String durationText;
+
+    @TableField(exist = false)
+    private String fileSizeText;
+
+    @TableField(exist = false)
+    private Boolean isLike;
+
+    public static final int UPLOADER_TYPE_USER = 1;//用户投稿
+    public static final int UPLOADER_TYPE_ADMIN = 2;//管理员上传
+
+    public static final int STATUS_PENDING = 0;//待审核
+    public static final int STATUS_PUBLISHED = 1;//已发布
+    public static final int STATUS_REJECTED = 2;//已拒绝
+    public static final int STATUS_OFFLINE = 3;//已下架
 
     @Override
     public boolean equals(Object that) {

@@ -1,9 +1,15 @@
 package com.ai_study_rest_hub_server.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
@@ -12,7 +18,7 @@ import lombok.Data;
  */
 @TableName(value ="video_categories")
 @Data
-public class VideoCategory extends BaseEntity{
+public class VideoCategory{
     /**
      * 分类ID
      */
@@ -47,12 +53,23 @@ public class VideoCategory extends BaseEntity{
     /**
      * 创建时间
      */
-    private Date createdAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdAt;
 
     /**
      * 更新时间
      */
-    private Date updatedAt;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime updatedAt;
+
+    @TableField(exist = false)
+    private List<VideoCategory> children;
+
+    @TableField(exist = false)
+    private Long videoCount;
+
+    @TableField(exist = false)
+    private String parentName;
 
     @Override
     public boolean equals(Object that) {

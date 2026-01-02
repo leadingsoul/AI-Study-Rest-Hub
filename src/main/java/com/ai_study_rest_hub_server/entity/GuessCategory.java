@@ -1,9 +1,12 @@
 package com.ai_study_rest_hub_server.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -13,11 +16,6 @@ import lombok.Data;
 @TableName(value ="guess_categories")
 @Data
 public class GuessCategory extends BaseEntity{
-    /**
-     *  猜词分类 ID,（主键）
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
 
     /**
      *  分类名称 
@@ -44,20 +42,8 @@ public class GuessCategory extends BaseEntity{
      */
     private Integer status;
 
-    /**
-     *  创建时间 
-     */
-    private Date createTime;
-
-    /**
-     *  更新时间 
-     */
-    private Date updateTime;
-
-    /**
-     * 0 - 未删除，1 - 已删除 
-     */
-    private Integer isDeleted;
+    @TableField(exist = false)
+    private List<GuessCategory> children;
 
     @Override
     public boolean equals(Object that) {
@@ -104,15 +90,11 @@ public class GuessCategory extends BaseEntity{
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
         sb.append(", name=").append(name);
         sb.append(", description=").append(description);
         sb.append(", parentId=").append(parentId);
         sb.append(", sortOrder=").append(sortOrder);
         sb.append(", status=").append(status);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", isDeleted=").append(isDeleted);
         sb.append("]");
         return sb.toString();
     }

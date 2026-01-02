@@ -1,9 +1,15 @@
 package com.ai_study_rest_hub_server.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+
+import java.time.LocalDateTime;
 import java.util.Date;
+import java.util.List;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 /**
@@ -13,12 +19,6 @@ import lombok.Data;
 @TableName(value ="exam_records")
 @Data
 public class ExamRecord extends BaseEntity{
-    /**
-     * 
-     */
-    @TableId(type = IdType.AUTO)
-    private Integer id;
-
     /**
      * 
      */
@@ -42,12 +42,14 @@ public class ExamRecord extends BaseEntity{
     /**
      * 
      */
-    private Date startTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private LocalDateTime startTime;
 
     /**
      * 
      */
-    private Date endTime;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
+    private LocalDateTime endTime;
 
     /**
      * 
@@ -59,20 +61,11 @@ public class ExamRecord extends BaseEntity{
      */
     private Integer windowSwitches;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
+    @TableField(exist = false)
+    private List<AnswerRecord> answerRecords;
 
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    /**
-     * 0-未删除，1-已删除
-     */
-    private Integer isDeleted;
+    @TableField(exist = false)
+    private Paper paper;
 
     @Override
     public boolean equals(Object that) {
@@ -125,7 +118,6 @@ public class ExamRecord extends BaseEntity{
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
         sb.append(", examId=").append(examId);
         sb.append(", userName=").append(userName);
         sb.append(", score=").append(score);
@@ -134,9 +126,6 @@ public class ExamRecord extends BaseEntity{
         sb.append(", endTime=").append(endTime);
         sb.append(", status=").append(status);
         sb.append(", windowSwitches=").append(windowSwitches);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", isDeleted=").append(isDeleted);
         sb.append("]");
         return sb.toString();
     }

@@ -16,11 +16,6 @@ import lombok.Data;
 @Data
 @Schema(description = "轮播图实体类")
 public class Banner extends BaseEntity{
-    /**
-     * 轮播图ID
-     */
-    @TableId(type = IdType.AUTO)
-    private Long id;
 
     /**
      * 轮播图标题
@@ -51,21 +46,6 @@ public class Banner extends BaseEntity{
      * 是否启用
      */
     private Boolean isActive;
-
-    /**
-     * 创建时间
-     */
-    private Date createTime;
-
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    /**
-     * 0-未删除，1-已删除
-     */
-    private Integer isDeleted;
 
     @Override
     public boolean equals(Object that) {
@@ -114,16 +94,12 @@ public class Banner extends BaseEntity{
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
         sb.append(", title=").append(title);
         sb.append(", description=").append(description);
         sb.append(", imageUrl=").append(imageUrl);
         sb.append(", linkUrl=").append(linkUrl);
         sb.append(", sortOrder=").append(sortOrder);
         sb.append(", isActive=").append(isActive);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", isDeleted=").append(isDeleted);
         sb.append("]");
         return sb.toString();
     }

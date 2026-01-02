@@ -6,6 +6,8 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.math.BigDecimal;
 import java.util.Date;
+
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import lombok.Data;
 
 /**
@@ -15,11 +17,6 @@ import lombok.Data;
 @TableName(value ="paper_question")
 @Data
 public class PaperQuestion extends BaseEntity{
-    /**
-     * 
-     */
-    @TableId(type = IdType.AUTO)
-    private Integer id;
 
     /**
      * 
@@ -36,20 +33,12 @@ public class PaperQuestion extends BaseEntity{
      */
     private BigDecimal score;
 
-    /**
-     * 创建时间
-     */
-    private Date createTime;
 
-    /**
-     * 更新时间
-     */
-    private Date updateTime;
-
-    /**
-     * 0-未删除，1-已删除
-     */
-    private Integer isDeleted;
+    public PaperQuestion(Integer paperId,Long questionId,BigDecimal score){
+        this.paperId = paperId;
+        this.questionId = questionId;
+        this.score = score;
+    }
 
     @Override
     public boolean equals(Object that) {
@@ -92,13 +81,9 @@ public class PaperQuestion extends BaseEntity{
         sb.append(getClass().getSimpleName());
         sb.append(" [");
         sb.append("Hash = ").append(hashCode());
-        sb.append(", id=").append(id);
         sb.append(", paperId=").append(paperId);
         sb.append(", questionId=").append(questionId);
         sb.append(", score=").append(score);
-        sb.append(", createTime=").append(createTime);
-        sb.append(", updateTime=").append(updateTime);
-        sb.append(", isDeleted=").append(isDeleted);
         sb.append("]");
         return sb.toString();
     }
