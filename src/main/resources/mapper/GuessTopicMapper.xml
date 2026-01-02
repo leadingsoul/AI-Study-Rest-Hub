@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ai_study_rest_hub_server.mapper.GuessTopicMapper">
+
+    <resultMap id="BaseResultMap" type="com.ai_study_rest_hub_server.entity.GuessTopic">
+            <id property="id" column="id" />
+            <result property="topicName" column="topic_name" />
+            <result property="topicDescription" column="topic_description" />
+            <result property="categoryId" column="category_id" />
+            <result property="recordCount" column="record_count" />
+            <result property="difficulty" column="difficulty" />
+            <result property="target" column="target" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+            <result property="isDeleted" column="is_deleted" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,topic_name,topic_description,category_id,record_count,difficulty,
+        target,create_time,update_time,is_deleted
+    </sql>
+</mapper>

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ai_study_rest_hub_server.mapper.QuestionMapper">
+
+    <resultMap id="BaseResultMap" type="com.ai_study_rest_hub_server.entity.Question">
+            <id property="id" column="id" />
+            <result property="title" column="title" />
+            <result property="type" column="type" />
+            <result property="multi" column="multi" />
+            <result property="categoryId" column="category_id" />
+            <result property="difficulty" column="difficulty" />
+            <result property="score" column="score" />
+            <result property="analysis" column="analysis" />
+            <result property="createTime" column="create_time" />
+            <result property="updateTime" column="update_time" />
+            <result property="isDeleted" column="is_deleted" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,title,type,multi,category_id,difficulty,
+        score,analysis,create_time,update_time,is_deleted
+    </sql>
+</mapper>

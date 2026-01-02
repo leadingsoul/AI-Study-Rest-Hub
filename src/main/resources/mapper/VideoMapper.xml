@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ai_study_rest_hub_server.mapper.VideoMapper">
+
+    <resultMap id="BaseResultMap" type="com.ai_study_rest_hub_server.entity.Video">
+            <id property="id" column="id" />
+            <result property="title" column="title" />
+            <result property="description" column="description" />
+            <result property="categoryId" column="category_id" />
+            <result property="fileUrl" column="file_url" />
+            <result property="coverUrl" column="cover_url" />
+            <result property="duration" column="duration" />
+            <result property="fileSize" column="file_size" />
+            <result property="uploaderName" column="uploader_name" />
+            <result property="uploaderType" column="uploader_type" />
+            <result property="userId" column="user_id" />
+            <result property="adminId" column="admin_id" />
+            <result property="status" column="status" />
+            <result property="auditAdminId" column="audit_admin_id" />
+            <result property="auditTime" column="audit_time" />
+            <result property="auditReason" column="audit_reason" />
+            <result property="viewCount" column="view_count" />
+            <result property="likeCount" column="like_count" />
+            <result property="tags" column="tags" />
+            <result property="createdAt" column="created_at" />
+            <result property="updatedAt" column="updated_at" />
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,title,description,category_id,file_url,cover_url,
+        duration,file_size,uploader_name,uploader_type,user_id,
+        admin_id,status,audit_admin_id,audit_time,audit_reason,
+        view_count,like_count,tags,created_at,updated_at
+    </sql>
+</mapper>
