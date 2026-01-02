@@ -7,6 +7,7 @@ import com.ai_study_rest_hub_server.vo.LoginResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.*;
  * 用户控制器 - 处理用户认证和权限管理相关的HTTP请求
  * 包括用户登录、权限验证等功能
  */
+@Slf4j
 @RestController  // REST控制器，返回JSON数据
 @RequestMapping("/api/user")  // 用户API路径前缀
 @CrossOrigin(origins = "*")  // 允许跨域访问

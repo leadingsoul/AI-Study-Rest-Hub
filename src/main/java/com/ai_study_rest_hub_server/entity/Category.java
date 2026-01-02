@@ -35,6 +35,9 @@ public class Category extends BaseEntity{
     @TableField(exist = false)
     private List<Category> children;
 
+    @TableField(exist = false)
+    private Long count;
+
 
     @Override
     public boolean equals(Object that) {

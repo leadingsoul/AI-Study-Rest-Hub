@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,8 @@ import org.springframework.web.bind.annotation.*;
  * 试卷控制器 - 处理试卷管理相关的HTTP请求
  * 包括试卷的CRUD操作、AI智能组卷、状态管理等功能
  */
+@CrossOrigin
+@Slf4j
 @RestController  // REST控制器，返回JSON数据
 @RequestMapping("/api/papers")  // 试卷API路径前缀
 @Tag(name = "试卷管理", description = "试卷相关操作，包括创建、查询、更新、删除，以及AI智能组卷功能")  // Swagger API分组

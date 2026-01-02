@@ -8,6 +8,7 @@ import com.ai_study_rest_hub_server.vo.SubmitAnswerVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -16,6 +17,7 @@ import java.util.List;
  * 考试控制器 - 处理考试流程相关的HTTP请求
  * 包括开始考试、提交答案、AI批阅、成绩查询等功能
  */
+@Slf4j
 @RestController  // REST控制器，返回JSON数据
 @RequestMapping("/api/exams")  // 考试API路径前缀
 @CrossOrigin(origins = "*")  // 允许跨域访问

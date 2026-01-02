@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +36,7 @@ import java.util.stream.Collectors;
  * @author 智能学习平台开发团队
  * @version 1.0
  */
+@Slf4j
 @RestController  // @Controller + @ResponseBody，表示这是一个REST控制器，返回JSON数据
 @RequestMapping("/api/questions")  // 设置基础URL路径，所有方法的URL都以此开头
 @CrossOrigin(origins = "*")  // 允许跨域访问，解决前后端分离开发中的跨域问题
