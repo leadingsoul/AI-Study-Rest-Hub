@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
 /**
@@ -12,7 +14,8 @@ import lombok.Data;
  */
 @TableName(value ="banners")
 @Data
-public class Banner {
+@Schema(description = "轮播图实体类")
+public class Banner extends BaseEntity{
     /**
      * 轮播图ID
      */
@@ -47,7 +50,7 @@ public class Banner {
     /**
      * 是否启用
      */
-    private Integer isActive;
+    private Boolean isActive;
 
     /**
      * 创建时间

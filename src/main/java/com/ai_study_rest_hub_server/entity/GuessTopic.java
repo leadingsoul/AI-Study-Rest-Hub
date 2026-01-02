@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @TableName(value ="guess_topics")
 @Data
-public class GuessTopic {
+public class GuessTopic extends BaseEntity{
     /**
      *  猜题题目 ID，主键 
      */

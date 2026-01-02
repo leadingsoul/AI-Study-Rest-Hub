@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @TableName(value ="videos")
 @Data
-public class Video {
+public class Video extends BaseEntity{
     /**
      * 视频ID
      */

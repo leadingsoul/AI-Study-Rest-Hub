@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @TableName(value ="questions")
 @Data
-public class Question {
+public class Question extends BaseEntity{
     /**
      * 
      */

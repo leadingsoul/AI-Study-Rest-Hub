@@ -14,7 +14,7 @@ import lombok.Data;
  */
 @TableName(value ="paper_question")
 @Data
-public class PaperQuestion {
+public class PaperQuestion extends BaseEntity{
     /**
      * 
      */

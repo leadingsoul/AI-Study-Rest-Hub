@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @TableName(value ="users")
 @Data
-public class User {
+public class User extends BaseEntity{
     /**
      * 
      */

@@ -1,4 +1,4 @@
-package com.ai_study_rest_hub_server.common;
+package com.ai_study_rest_hub_server.constant;
 
 /**
  * 缓存常量类

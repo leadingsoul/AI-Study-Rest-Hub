@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @TableName(value ="notices")
 @Data
-public class Notice {
+public class Notice extends BaseEntity{
     /**
      * 公告ID
      */
