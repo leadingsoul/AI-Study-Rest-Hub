@@ -1,10 +1,13 @@
 package com.ai_study_rest_hub_server.service;
 
 import com.ai_study_rest_hub_server.entity.Question;
+import com.ai_study_rest_hub_server.vo.QuestionImportVo;
 import com.ai_study_rest_hub_server.vo.QuestionQueryVo;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 /**
@@ -71,4 +74,22 @@ public interface QuestionService extends IService<Question> {
      * @return 返回符合指定难度等级的问题列表，如果没有匹配的问题则返回空列表
      */
     List<Question> getQuestionsByDifficulty(String difficulty);
+
+    /**
+     * 解析并预览Excel文件中的题目内容，不会导入到数据库
+     *   文件和格式校验
+     *   文件解析处理
+     * @param file
+     * @return
+     */
+    List<QuestionImportVo> preViewExcel(MultipartFile file) throws IOException;
+
+    /**
+     * 【方法重载】
+     * 批量题目导入 [execl和ai生成批量导入]
+     *   批量数据库添加
+     * @param questions
+     * @return Excel导入完成！成功导入 %d [工程导入] / %d [题目总数] 道题目
+     */
+    int importBatchQuestions(List<QuestionImportVo> questions);
 }

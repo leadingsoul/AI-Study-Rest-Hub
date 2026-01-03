@@ -2,11 +2,11 @@ server:
   port: 8080
 spring:
   datasource:
-    driver-class-name: com.mysql.cj.jdbc.Driver
-    type: com.zaxxer.hikari.HikariDataSource
-    url: jdbc:mysql://localhost:3306/study_rest_hub?useUnicode=true&characterEncoding=utf-8&useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=GMT%2b8
-    username: root
-    password: 12345
+    driver-class-name: ${leadingsoul.datasource.driver-class-name}
+    type: ${leadingsoul.datasource.type}
+    url: ${leadingsoul.datasource.url}
+    username: ${leadingsoul.datasource.username}
+    password: ${leadingsoul.datasource.password}
     hikari:
       connection-test-query: SELECT 1 # 自动检测连接
       connection-timeout: 60000 #数据库连接超时时间,默认30秒
@@ -24,9 +24,24 @@ spring:
       max-request-size: 20MB
   data:
     redis:
-      host: 192.168.214.129
-      port: 6379
-      database: 0
+      host: ${leadingsoul.data.redis.host}
+      port: ${leadingsoul.data.redis.port}
+      database: ${leadingsoul.data.redis.database}
+  application:
+    name: AI_Study_Rest_Hub
+  ai:
+    openai:
+      api-key: ${leadingsoul.ai.openai.api-key}
+      base-url: ${leadingsoul.ai.openai.base-url}
+      chat:
+        options:
+          model: ${leadingsoul.ai.openai.chat.options.model}
+          temperature: ${leadingsoul.ai.openai.chat.options.temperature}
+          max-tokens: ${leadingsoul.ai.openai.chat.options.max-tokens}
+          top-p: ${leadingsoul.ai.openai.chat.options.top-p}
+          top-k: ${leadingsoul.ai.openai.chat.options.top-k}
+          FrequencyPenalty: ${leadingsoul.ai.openai.chat.options.FrequencyPenalty}
+          ThinkingBudget: ${leadingsoul.ai.openai.chat.options.ThinkingBudget}
 springdoc:
   default-flat-param-object: true
 mybatis-plus:
@@ -38,7 +53,7 @@ mybatis-plus:
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
 minio:
-  endpoint: http://192.168.214.129:9000
-  access-key: minioadmin
-  secret-key: minioadmin
-  bucket-name: ai-study-rest-hub
+  endpoint: ${minio.endpoint}
+  access-key: ${minio.access-key}
+  secret-key: ${minio.secret-key}
+  bucket-name: ${minio.bucket-name}

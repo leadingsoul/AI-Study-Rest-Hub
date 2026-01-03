@@ -7,7 +7,9 @@ import com.ai_study_rest_hub_server.entity.QuestionChoice;
 import com.ai_study_rest_hub_server.mapper.PaperQuestionMapper;
 import com.ai_study_rest_hub_server.mapper.QuestionAnswerMapper;
 import com.ai_study_rest_hub_server.mapper.QuestionChoiceMapper;
+import com.ai_study_rest_hub_server.utils.ExcelUtil;
 import com.ai_study_rest_hub_server.utils.RedisUtils;
+import com.ai_study_rest_hub_server.vo.QuestionImportVo;
 import com.ai_study_rest_hub_server.vo.QuestionQueryVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
@@ -16,11 +18,14 @@ import com.ai_study_rest_hub_server.entity.Question;
 import com.ai_study_rest_hub_server.service.QuestionService;
 import com.ai_study_rest_hub_server.mapper.QuestionMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -231,6 +236,72 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         List<Question> questions = list(lambdaQueryWrapper);
         fillQuestionChoiceAndAnswer(questions);
         return questions;
+    }
+
+    @Override
+    public List<QuestionImportVo> preViewExcel(MultipartFile file) throws IOException {
+        //校验
+        if (file == null||file.isEmpty()){
+            throw new RuntimeException("预览的文件为空");
+        }
+        String fileName = file.getOriginalFilename();
+        if(!fileName.endsWith(".xlsx")&&!fileName.endsWith(".xls")){
+            throw new RuntimeException("预览的文件格式不正确");
+        }
+        List<QuestionImportVo> questionImportVos = ExcelUtil.parseExcel(file);
+        return questionImportVos;
+    }
+
+    @Override
+    public int importBatchQuestions(List<QuestionImportVo> questions) {
+        //1.进行数据校验
+        if(questions==null||questions.isEmpty()){
+            throw new RuntimeException("导入的题目集合为空");
+        }
+        //2.批量导入
+        int successCount = 0;
+        for(int i=0;i<questions.size();i++){
+            try {
+                Question question = convertQuestionImportVoToQuestion(questions.get(i));
+                saveQuestion(question);
+                successCount++;
+            }
+            catch (Exception e){
+                log.debug("{}题目导入失败！",questions.get(i).getTitle());
+            }
+        }
+        return  successCount;
+    }
+
+    private Question convertQuestionImportVoToQuestion(QuestionImportVo questionImportVo) {
+        //1.给question本体属性赋值
+        Question question = new Question();
+        BeanUtils.copyProperties(questionImportVo,question);
+        //2.判断是选择，给选择集合进行赋值
+        if("CHOICE".equals(question.getType())){
+            if(questionImportVo.getChoices().size()>0){
+                List<QuestionChoice> questionChoices = new ArrayList<>(questionImportVo.getChoices().size());
+                for (QuestionImportVo.ChoiceImportDto importVoChoice : questionImportVo.getChoices()) {
+                    QuestionChoice questionChoice = new QuestionChoice();
+                    questionChoice.setContent(importVoChoice.getContent());
+                    questionChoice.setIsCorrect(importVoChoice.getIsCorrect());
+                    questionChoice.setSort(importVoChoice.getSort());
+                    questionChoices.add(questionChoice);
+                }
+                question.setChoices(questionChoices);
+            }
+        }
+        //3.给答案进行赋值
+        QuestionAnswer questionAnswer = new QuestionAnswer();
+        if("JUDGE".equals(questionImportVo.getType())){
+            questionAnswer.setAnswer(questionImportVo.getAnswer().toUpperCase());
+        }else{
+            questionAnswer.setAnswer(questionImportVo.getAnswer());
+        }
+        questionAnswer.setKeywords(questionImportVo.getKeywords());
+        question.setAnswer(questionAnswer);
+
+        return question;
     }
 
     private void fillQuestionChoiceAndAnswer(List<Question> questions) {
