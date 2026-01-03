@@ -27,7 +27,7 @@ public class QuestionChoice extends BaseEntity{
     /**
      * 
      */
-    private Integer isCorrect;
+    private Boolean isCorrect;
 
     /**
      * 

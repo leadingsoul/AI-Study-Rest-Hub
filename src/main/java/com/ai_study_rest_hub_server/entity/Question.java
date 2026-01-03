@@ -7,6 +7,8 @@ import com.baomidou.mybatisplus.annotation.TableName;
 
 import java.math.BigDecimal;
 import java.util.Date;
+import java.util.List;
+
 import lombok.Data;
 
 /**
@@ -54,6 +56,15 @@ public class Question extends BaseEntity{
      * 
      */
     private String analysis;
+
+    @TableField(exist = false)
+    private List<QuestionChoice> choices;
+
+    @TableField(exist = false)
+    private QuestionAnswer answer;
+
+    @TableField(exist = false)
+    private Category category;
 
     @Override
     public boolean equals(Object that) {

@@ -20,8 +20,15 @@ spring:
     time-zone: GMT+8
   servlet:
     multipart:
-      max-file-size: 5MB
-      max-request-size: 5MB
+      max-file-size: 10MB
+      max-request-size: 20MB
+  data:
+    redis:
+      host: 192.168.214.129
+      port: 6379
+      database: 0
+springdoc:
+  default-flat-param-object: true
 mybatis-plus:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
