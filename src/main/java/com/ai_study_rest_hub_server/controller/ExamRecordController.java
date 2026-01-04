@@ -2,8 +2,13 @@ package com.ai_study_rest_hub_server.controller;
 
 import com.ai_study_rest_hub_server.common.Result;
 import com.ai_study_rest_hub_server.entity.ExamRecord;
+import com.ai_study_rest_hub_server.entity.Paper;
+import com.ai_study_rest_hub_server.service.ExamService;
+import com.ai_study_rest_hub_server.service.PaperService;
 import com.ai_study_rest_hub_server.vo.ExamRankingVO;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.ObjectUtils;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
@@ -16,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * 考试记录控制器 - 处理考试记录管理相关的HTTP请求
@@ -29,7 +36,8 @@ import java.util.List;
 @Tag(name = "考试记录管理", description = "考试记录相关操作，包括记录查询、成绩管理、排行榜展示等功能")  // Swagger API分组
 public class ExamRecordController {
 
-
+    private final ExamService examService;
+    private final PaperService paperService;
 
     /**
      * 分页查询考试记录
@@ -45,8 +53,27 @@ public class ExamRecordController {
             @Parameter(description = "开始日期，格式：yyyy-MM-dd") @RequestParam(required = false) String startDate,
             @Parameter(description = "结束日期，格式：yyyy-MM-dd") @RequestParam(required = false) String endDate
     ) {
-
-        return Result.success(null);
+        Page<ExamRecord> myPage = new Page<>(page,size);
+        LambdaQueryWrapper<ExamRecord> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        lambdaQueryWrapper.like(!ObjectUtils.isEmpty(studentName), ExamRecord::getUserName, studentName);
+        if (status != null){
+            String strStatus = switch (status) {
+                case 0 -> "进行中";
+                case 1 -> "已完成";
+                case 2 -> "已批阅";
+                default -> null;
+            };        lambdaQueryWrapper.eq(!ObjectUtils.isEmpty(strStatus),ExamRecord::getStatus,strStatus);
+        }
+        lambdaQueryWrapper.ge(!ObjectUtils.isEmpty(startDate),ExamRecord::getStartTime,startDate);
+        lambdaQueryWrapper.le(!ObjectUtils.isEmpty(endDate),ExamRecord::getStartTime,endDate);
+        examService.page(myPage,lambdaQueryWrapper);
+        List<Integer> paperIdList = myPage.getRecords().stream().map(ExamRecord::getExamId).toList();
+        LambdaQueryWrapper<Paper> paperLambdaQueryWrapper = new LambdaQueryWrapper<>();
+        paperLambdaQueryWrapper.in(!ObjectUtils.isEmpty(paperIdList),Paper::getId,paperIdList);
+        List<Paper> paperList = paperService.list(paperLambdaQueryWrapper);
+        Map<Long, Paper> paperMap = paperList.stream().collect(Collectors.toMap(Paper::getId, p -> p));
+        myPage.getRecords().forEach(examRecord -> examRecord.setPaper(paperMap.get(examRecord.getExamId().longValue())));
+        return Result.success(myPage);
     }
 
     /**
@@ -56,8 +83,8 @@ public class ExamRecordController {
     @Operation(summary = "获取考试记录详情", description = "根据记录ID获取考试记录的详细信息，包括试卷内容和答题情况")  // API描述
     public Result<ExamRecord> getExamRecordById(
             @Parameter(description = "考试记录ID") @PathVariable Integer id) {
-
-        return Result.success(null);
+        ExamRecord examRecord = examService.getExamRecordById(id);
+        return Result.success(examRecord);
     }
 
     /**
@@ -67,8 +94,9 @@ public class ExamRecordController {
     @Operation(summary = "删除考试记录", description = "根据ID删除指定的考试记录")  // API描述
     public Result<Void> deleteExamRecord(
             @Parameter(description = "考试记录ID") @PathVariable Integer id) {
-
-         return Result.error("删除失败");
+        examService.RemoveById(id);
+        log.info("删除考试记录，ID: {}", id);
+        return Result.success("考试记录删除成功！id：%s".formatted(id));
     }
 
     /**
@@ -86,7 +114,8 @@ public class ExamRecordController {
             @Parameter(description = "显示数量限制，可选，不传则返回所有记录") @RequestParam(required = false) Integer limit
     ) {
         // 使用优化的查询方法，避免N+1查询问题
-
-        return Result.success(null);
+        List<ExamRankingVO> examRankingList = examService.getExamRanking(paperId, limit);
+        log.info("查询：{}试卷下的{}条数据成功！数据为：{}",paperId,limit,examRankingList);
+        return Result.success(examRankingList);
     }
 } 

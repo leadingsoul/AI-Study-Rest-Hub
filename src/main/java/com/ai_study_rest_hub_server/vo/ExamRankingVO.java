@@ -1,5 +1,8 @@
 package com.ai_study_rest_hub_server.vo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Data;
 
@@ -17,6 +20,7 @@ import java.util.Map;
 @Schema(description = "考试排行榜信息")
 public class ExamRankingVO implements Serializable {
 
+    @TableId(value = "id", type = IdType.AUTO)
     @Schema(description = "考试记录ID", example = "1")
     private Integer id; // 考试记录ID
 
@@ -36,9 +40,11 @@ public class ExamRankingVO implements Serializable {
     private BigDecimal paperTotalScore; // 试卷总分（通过关联查询获取）
 
     @Schema(description = "考试开始时间", example = "2024-01-15 09:00:00")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private LocalDateTime startTime; // 开始时间
 
     @Schema(description = "考试结束时间", example = "2024-01-15 11:00:00")
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss",timezone = "GMT+8")
     private LocalDateTime endTime; // 结束时间
 
     @Schema(description = "考试用时（分钟）", example = "120")

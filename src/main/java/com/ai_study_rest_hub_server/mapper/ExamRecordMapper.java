@@ -1,7 +1,10 @@
 package com.ai_study_rest_hub_server.mapper;
 
 import com.ai_study_rest_hub_server.entity.ExamRecord;
+import com.ai_study_rest_hub_server.vo.ExamRankingVO;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+
+import java.util.List;
 
 /**
 * @author leadingsoul
@@ -11,6 +14,7 @@ import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 */
 public interface ExamRecordMapper extends BaseMapper<ExamRecord> {
 
+    List<ExamRankingVO> queryRanking(Integer paperId, Integer limit);
 }
 
 

@@ -14,9 +14,6 @@
             <result property="endTime" column="end_time" />
             <result property="status" column="status" />
             <result property="windowSwitches" column="window_switches" />
-            <result property="createTime" column="create_time" />
-            <result property="updateTime" column="update_time" />
-            <result property="isDeleted" column="is_deleted" />
     </resultMap>
 
     <sql id="Base_Column_List">
@@ -24,4 +21,23 @@
         end_time,status,window_switches,create_time,update_time,
         is_deleted
     </sql>
+
+    <select id="queryRanking" resultType="com.ai_study_rest_hub_server.vo.ExamRankingVO">
+        select
+        er.*,
+        pr.`name` paper_name ,
+        pr. total_score paper_total_score,
+        TIMESTAMPDIFF(MINUTE, er.start_time, er.end_time) duration
+        from exam_records er left join paper pr
+        on er.exam_id = pr.id
+        where er.is_deleted = 0 and pr.is_deleted = 0
+        and er.`status` = '已批阅'
+        <if test="paperId != null">
+            and pr.id=#{paperId}
+        </if>
+        order by er.score desc , duration asc
+        <if test="limit != null">
+            limit #{limit};
+        </if>
+    </select>
 </mapper>

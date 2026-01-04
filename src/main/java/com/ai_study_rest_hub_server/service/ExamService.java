@@ -1,6 +1,7 @@
 package com.ai_study_rest_hub_server.service;
 
 import com.ai_study_rest_hub_server.entity.ExamRecord;
+import com.ai_study_rest_hub_server.vo.ExamRankingVO;
 import com.ai_study_rest_hub_server.vo.StartExamVo;
 import com.ai_study_rest_hub_server.vo.SubmitAnswerVo;
 import com.baomidou.mybatisplus.extension.service.IService;
@@ -25,5 +26,9 @@ public interface ExamService extends IService<ExamRecord> {
     void submitAnswers(Integer examRecordId, List<SubmitAnswerVo> answers) throws InterruptedIOException;
 
     void AIGradeExam(Integer examRecordId) throws InterruptedIOException;
+
+    void RemoveById(Integer id);
+
+    List<ExamRankingVO> getExamRanking(Integer paperId, Integer limit);
 }
  

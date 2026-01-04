@@ -9,6 +9,7 @@ import com.ai_study_rest_hub_server.service.AnswerRecordService;
 import com.ai_study_rest_hub_server.service.ExamAIGradingService;
 import com.ai_study_rest_hub_server.service.ExamService;
 import com.ai_study_rest_hub_server.service.PaperService;
+import com.ai_study_rest_hub_server.vo.ExamRankingVO;
 import com.ai_study_rest_hub_server.vo.GradingResult;
 import com.ai_study_rest_hub_server.vo.StartExamVo;
 import com.ai_study_rest_hub_server.vo.SubmitAnswerVo;
@@ -37,6 +38,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamRecordMapper, ExamRecord> i
     private final PaperService paperService;
     private final AnswerRecordService answerRecordService;
     private final ExamAIGradingService examAIGradingService;
+    private final ExamRecordMapper examRecordMapper;
 
     @Override
     public ExamRecord startExam(StartExamVo startExamVo) {
@@ -124,6 +126,22 @@ public class ExamServiceImpl extends ServiceImpl<ExamRecordMapper, ExamRecord> i
             throw new RuntimeException("考试记录的状态不是已完成！无法进行AI判卷！");
         }
         gradeExam(examRecordId);
+    }
+
+    @Override
+    public void RemoveById(Integer id) {
+        ExamRecord examRecord = getById(id);
+        if ("进行中".equals(examRecord.getStatus())){
+            throw new RuntimeException("正在考试中，无法直接删除！");
+        }
+        //删除自身数据，同时删除答题记录
+        removeById(id);
+        answerRecordService.remove(new LambdaQueryWrapper<AnswerRecord>().eq(AnswerRecord::getExamRecordId,id));
+    }
+
+    @Override
+    public List<ExamRankingVO> getExamRanking(Integer paperId, Integer limit) {
+        return examRecordMapper.queryRanking(paperId,limit);
     }
 
     private void gradeExam(Integer examRecordId) throws InterruptedIOException {
