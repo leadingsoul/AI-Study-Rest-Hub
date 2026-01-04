@@ -21,7 +21,7 @@ public class ExamRankingVO implements Serializable {
     private Integer id; // 考试记录ID
 
     @Schema(description = "考生姓名", example = "张三")
-    private String studentName; // 考生姓名
+    private String userName; // 考生姓名
 
     @Schema(description = "考试得分", example = "85")
     private Integer score; // 考试得分

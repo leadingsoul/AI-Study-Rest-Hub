@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 
+import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
@@ -18,7 +19,12 @@ import lombok.Data;
  */
 @TableName(value ="exam_records")
 @Data
-public class ExamRecord extends BaseEntity{
+public class ExamRecord implements Serializable {
+    /**
+     * 主键ID
+     */
+    @TableId(value = "id", type = IdType.AUTO)
+    private Integer id;
     /**
      * 
      */
@@ -87,10 +93,7 @@ public class ExamRecord extends BaseEntity{
             && (this.getStartTime() == null ? other.getStartTime() == null : this.getStartTime().equals(other.getStartTime()))
             && (this.getEndTime() == null ? other.getEndTime() == null : this.getEndTime().equals(other.getEndTime()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
-            && (this.getWindowSwitches() == null ? other.getWindowSwitches() == null : this.getWindowSwitches().equals(other.getWindowSwitches()))
-            && (this.getCreateTime() == null ? other.getCreateTime() == null : this.getCreateTime().equals(other.getCreateTime()))
-            && (this.getUpdateTime() == null ? other.getUpdateTime() == null : this.getUpdateTime().equals(other.getUpdateTime()))
-            && (this.getIsDeleted() == null ? other.getIsDeleted() == null : this.getIsDeleted().equals(other.getIsDeleted()));
+            && (this.getWindowSwitches() == null ? other.getWindowSwitches() == null : this.getWindowSwitches().equals(other.getWindowSwitches()));
     }
 
     @Override
@@ -106,9 +109,6 @@ public class ExamRecord extends BaseEntity{
         result = prime * result + ((getEndTime() == null) ? 0 : getEndTime().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
         result = prime * result + ((getWindowSwitches() == null) ? 0 : getWindowSwitches().hashCode());
-        result = prime * result + ((getCreateTime() == null) ? 0 : getCreateTime().hashCode());
-        result = prime * result + ((getUpdateTime() == null) ? 0 : getUpdateTime().hashCode());
-        result = prime * result + ((getIsDeleted() == null) ? 0 : getIsDeleted().hashCode());
         return result;
     }
 

@@ -45,6 +45,12 @@ public class AnswerRecord extends BaseEntity{
      */
     private String aiCorrection;
 
+    public AnswerRecord(Integer examRecordId, Integer questionId, String userAnswer) {
+        this.examRecordId = examRecordId;
+        this.questionId = questionId;
+        this.userAnswer = userAnswer;
+    }
+
 
     @Override
     public boolean equals(Object that) {

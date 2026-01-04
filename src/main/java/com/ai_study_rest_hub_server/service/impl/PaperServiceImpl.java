@@ -26,6 +26,7 @@ import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -159,7 +160,9 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper>
         //2.修改
         BeanUtils.copyProperties(paperVo, paper);
         paper.setQuestionCount(paperVo.getQuestions().size());
-        paper.setTotalScore(paperVo.getQuestions().values().stream().reduce(BigDecimal.ZERO, BigDecimal::add));
+
+        paper.setTotalScore(paperVo.getQuestions().values().stream()
+                        .filter(Objects::nonNull).reduce(BigDecimal.ZERO, BigDecimal::add));
         updateById(paper);
         //3.删除中间表，重新插入
         paperQuestionService.remove(new LambdaQueryWrapper<PaperQuestion>().eq(PaperQuestion::getPaperId, paper.getId()));
@@ -197,7 +200,11 @@ public class PaperServiceImpl extends ServiceImpl<PaperMapper, Paper>
         paperQuestionService.remove(new LambdaQueryWrapper<PaperQuestion>().eq(PaperQuestion::getPaperId,id));
     }
 
-    private int typeToInt(String type) {
+    public int typeToInt(String type) {
+        if (type == null) {
+            return 4; // 返回默认值
+        }
+
         switch (type) {
             case "CHOICE": return 1; // 选择题
             case "JUDGE": return 2;  // 判断题
