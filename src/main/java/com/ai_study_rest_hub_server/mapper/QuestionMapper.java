@@ -24,6 +24,16 @@ public interface QuestionMapper extends BaseMapper<Question> {
      */
     @Select("SELECT category_id, COUNT(*) as count FROM questions where is_deleted = 0  GROUP BY category_id ; ")
     List<Map<Long, Object>> getCategoryQuestionCount();
+
+    /**
+     * 根据页面ID查询问题列表
+     * 该方法用于从数据库中获取指定页面ID对应的所有问题记录
+     *
+     * @param id 页面ID，用于筛选特定页面的问题
+     * @return List<Question> 返回问题对象列表，包含该页面下的所有问题信息
+     *         如果未找到任何问题，可能返回空列表而非null
+     */
+    List<Question> queryQuestionListByPageId(Integer id);
 }
 
 
