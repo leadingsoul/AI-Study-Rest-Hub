@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -20,13 +21,13 @@ import java.util.Map;
  */
 @Slf4j
 @CrossOrigin
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/admin/videos")
 @Tag(name = "视频管理(管理端)", description = "管理端视频相关操作，包括视频管理、审核、统计等功能")
 public class VideoAdminController {
 
-    @Autowired
-    private VideoService videoService;
+    private final VideoService videoService;
 
     /**
      * 管理端分页获取视频列表

@@ -2,6 +2,7 @@ package com.ai_study_rest_hub_server.controller;
 
 
 import com.ai_study_rest_hub_server.common.Result;
+import com.ai_study_rest_hub_server.service.QuestionAIService;
 import com.ai_study_rest_hub_server.service.QuestionService;
 import com.ai_study_rest_hub_server.utils.ExcelUtil;
 import com.ai_study_rest_hub_server.vo.AiGenerateRequestVo;
@@ -9,6 +10,7 @@ import com.ai_study_rest_hub_server.vo.QuestionImportVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.apache.poi.ss.usermodel.Row;
@@ -24,6 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InterruptedIOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,13 +39,12 @@ import java.util.List;
 @RestController  // REST控制器，返回JSON数据
 @RequestMapping("/api/questions/batch")  // 题目批量操作API路径前缀
 @CrossOrigin(origins = "*")  // 允许跨域访问
+@RequiredArgsConstructor
 @Tag(name = "题目批量操作", description = "题目批量管理相关操作，包括Excel导入、AI生成题目、批量验证等功能")  // Swagger API分组
 public class QuestionBatchController {
 
-
-    @Autowired
-    private QuestionService questionService;
-
+    private final QuestionService questionService;
+    private final QuestionAIService questionAIService;
 
     /**
      * 下载Excel导入模板
@@ -96,9 +98,11 @@ public class QuestionBatchController {
     @PostMapping("/ai-generate")  // 处理POST请求
     @Operation(summary = "AI智能生成题目", description = "使用AI技术根据指定主题和要求智能生成题目，支持预览后再决定是否导入")  // API描述
     public Result<List<QuestionImportVo>> generateQuestionsByAi(
-            @RequestBody @Validated AiGenerateRequestVo request) {
-
-       return Result.error("AI生成题目失败");
+            @RequestBody @Validated AiGenerateRequestVo request) throws InterruptedIOException {
+        List<QuestionImportVo> questionImportVoList = questionAIService.aiGenerateQuestions(request);
+        log.info("使用ai生成：{} 为标题的题目成功！ 计划生成：{}道题，实际生成：{}道题！",
+                request.getTopic(),request.getCount(),questionImportVoList.size());
+        return Result.success(questionImportVoList);
     }
     
     /**

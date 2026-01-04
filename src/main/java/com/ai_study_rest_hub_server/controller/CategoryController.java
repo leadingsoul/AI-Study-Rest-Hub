@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,12 +20,13 @@ import java.util.List;
  */
 @CrossOrigin
 @Slf4j
+@RequiredArgsConstructor
 @RestController  // REST控制器，返回JSON数据
 @RequestMapping("/api/categories")  // 分类API路径前缀
 @Tag(name = "分类管理", description = "题目分类相关操作，包括分类的增删改查、树形结构管理等功能")  // Swagger API分组
 public class CategoryController {
-    @Autowired
-    private  CategoryService categoryService;
+
+    private final CategoryService categoryService;
 
 
     /**

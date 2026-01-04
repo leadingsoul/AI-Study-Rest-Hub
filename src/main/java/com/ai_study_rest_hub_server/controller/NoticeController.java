@@ -6,6 +6,7 @@ import com.ai_study_rest_hub_server.service.NoticeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +18,7 @@ import java.util.List;
  * 包括公告的增删改查、状态管理、前台展示等功能
  */
 @Slf4j
+@RequiredArgsConstructor
 @RestController  // REST控制器，返回JSON数据
 @RequestMapping("/api/notices")  // 公告API路径前缀
 @CrossOrigin  // 允许跨域访问
@@ -26,8 +28,7 @@ public class NoticeController {
     /**
      * 注入公告业务服务
      */
-    @Autowired
-    private NoticeService noticeService;
+    private final NoticeService noticeService;
     
     /**
      * 获取启用的公告（前台首页使用）

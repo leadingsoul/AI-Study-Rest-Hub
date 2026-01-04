@@ -7,6 +7,7 @@ import com.ai_study_rest_hub_server.service.VideoCategoryService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -19,13 +20,13 @@ import java.util.List;
  */
 @Slf4j
 @CrossOrigin
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/video-categories")
 @Tag(name = "视频分类管理", description = "视频分类相关操作，包括分类的增删改查、树形结构管理等功能")
 public class VideoCategoryController {
 
-    @Autowired
-    private VideoCategoryService videoCategoryService;
+    private final VideoCategoryService videoCategoryService;
 
     /**
      * 获取分类列表（包含视频数量）

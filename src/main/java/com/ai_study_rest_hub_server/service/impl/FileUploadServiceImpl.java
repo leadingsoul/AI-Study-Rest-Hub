@@ -4,6 +4,7 @@ import com.ai_study_rest_hub_server.config.properties.MinioProperties;
 import com.ai_study_rest_hub_server.service.FileUploadService;
 import io.minio.*;
 import io.minio.errors.*;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,11 +19,12 @@ import java.util.UUID;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class FileUploadServiceImpl implements FileUploadService {
-    @Autowired
-    private MinioClient minioClient;
-    @Autowired
-    private MinioProperties minioProperties;
+
+    private final MinioClient minioClient;
+
+    private final MinioProperties minioProperties;
     public String uploadFile(MultipartFile file,String folder) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException {
         //1. 判断桶是否存在
         boolean bucketExists = minioClient.bucketExists(BucketExistsArgs.builder().bucket(minioProperties.getBucketName()).build());

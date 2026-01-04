@@ -8,6 +8,7 @@ import com.ai_study_rest_hub_server.service.BannerService;
 import com.ai_study_rest_hub_server.mapper.BannerMapper;
 import io.minio.errors.*;
 import io.netty.util.internal.ObjectUtil;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,11 +26,11 @@ import java.security.NoSuchAlgorithmException;
 */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class BannerServiceImpl extends ServiceImpl<BannerMapper, Banner>
     implements BannerService {
 
-    @Autowired
-    private FileUploadService fileUploadService;
+    private final FileUploadService fileUploadService;
 
     /**
  * 添加横幅的方法

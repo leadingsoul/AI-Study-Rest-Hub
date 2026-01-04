@@ -17,6 +17,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ai_study_rest_hub_server.entity.Question;
 import com.ai_study_rest_hub_server.service.QuestionService;
 import com.ai_study_rest_hub_server.mapper.QuestionMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,19 +37,15 @@ import java.util.stream.Collectors;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     implements QuestionService {
 
-    @Autowired
-    private QuestionMapper questionMapper;
-    @Autowired
-    private QuestionChoiceMapper questionChoiceMapper;
-    @Autowired
-    private QuestionAnswerMapper questionAnswerMapper;
-    @Autowired
-    private RedisUtils redisUtils;
-    @Autowired
-    private PaperQuestionMapper paperQuestionMapper;
+    private final QuestionMapper questionMapper;
+    private final QuestionChoiceMapper questionChoiceMapper;
+    private final QuestionAnswerMapper questionAnswerMapper;
+    private final RedisUtils redisUtils;
+    private final PaperQuestionMapper paperQuestionMapper;
 
     @Override
     public void customPageJavaService(Page<Question> pageBean, QuestionQueryVo questionQueryVo) {

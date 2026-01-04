@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -23,13 +24,13 @@ import java.util.Map;
  */
 @Slf4j
 @CrossOrigin
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/api/videos")
 @Tag(name = "视频管理(用户端)", description = "用户端视频相关操作，包括视频浏览、观看、点赞、投稿等功能")
 public class VideoController {
 
-    @Autowired
-    private VideoService videoService;
+    private final VideoService videoService;
 
     /**
      * 分页获取已发布的视频列表

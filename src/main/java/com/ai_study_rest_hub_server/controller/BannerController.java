@@ -10,6 +10,7 @@ import io.minio.errors.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -28,11 +29,11 @@ import java.util.List;
 @RequestMapping("/api/banners")  // 轮播图API路径前缀
 @CrossOrigin  // 允许跨域访问
 @Slf4j
+@RequiredArgsConstructor
 @Tag(name = "轮播图管理", description = "轮播图相关操作，包括图片上传、轮播图增删改查、状态管理等功能")  // Swagger API分组
 public class BannerController {
 
-    @Autowired
-    private  BannerService bannerService;
+    private final BannerService bannerService;
 
     /**
      * 上传轮播图图片

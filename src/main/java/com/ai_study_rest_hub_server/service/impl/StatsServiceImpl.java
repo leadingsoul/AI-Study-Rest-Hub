@@ -6,6 +6,7 @@ import com.ai_study_rest_hub_server.service.StatsService;
 import com.ai_study_rest_hub_server.vo.StatsVo;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,22 +20,14 @@ import java.time.LocalTime;
  */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class StatsServiceImpl implements StatsService {
 
-    @Autowired
-    private QuestionMapper questionMapper;  // 题目Mapper
-    
-    @Autowired
-    private UserMapper userMapper;  // 用户Mapper
-    
-    @Autowired
-    private ExamRecordMapper examRecordMapper;  // 考试记录Mapper
-    
-    @Autowired
-    private CategoryMapper categoryMapper;  // 分类Mapper
-    
-    @Autowired
-    private PaperMapper paperMapper;  // 试卷Mapper
+    private final QuestionMapper questionMapper;  // 题目Mapper
+    private final UserMapper userMapper;  // 用户Mapper
+    private final ExamRecordMapper examRecordMapper;  // 考试记录Mapper
+    private final CategoryMapper categoryMapper;  // 分类Mapper
+    private final PaperMapper paperMapper;  // 试卷Mapper
 
     @Override
     public StatsVo getSystemStats() {

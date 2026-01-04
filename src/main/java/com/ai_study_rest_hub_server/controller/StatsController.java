@@ -6,6 +6,7 @@ import com.ai_study_rest_hub_server.service.StatsService;
 import com.ai_study_rest_hub_server.vo.StatsVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
  * 包括系统概览数据、各种统计信息等功能
  */
 @Slf4j
+@RequiredArgsConstructor
 @RestController  // REST控制器，返回JSON数据
 @RequestMapping("/api/stats")  // 统计API路径前缀
 @CrossOrigin(origins = "*")  // 允许跨域访问
@@ -27,8 +29,7 @@ public class StatsController {
     /**
      * 注入统计业务服务
      */
-    @Autowired
-    private StatsService statsService;
+    private final StatsService statsService;
 
     /**
      * 获取系统统计数据

@@ -7,6 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ai_study_rest_hub_server.entity.Category;
 import com.ai_study_rest_hub_server.service.CategoryService;
 import com.ai_study_rest_hub_server.mapper.CategoryMapper;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,13 +24,12 @@ import java.util.stream.Collectors;
 */
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category>
     implements CategoryService {
 
-    @Autowired
-    private CategoryMapper categoryMapper;
-    @Autowired
-    private QuestionMapper questionMapper;
+    private final CategoryMapper categoryMapper;
+    private final QuestionMapper questionMapper;
 
     @Override
     public List<Category> getAllCategories() {

@@ -7,6 +7,7 @@ import com.ai_study_rest_hub_server.vo.LoginResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
@@ -16,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
  * 包括用户登录、权限验证等功能
  */
 @Slf4j
+@RequiredArgsConstructor
 @RestController  // REST控制器，返回JSON数据
 @RequestMapping("/api/user")  // 用户API路径前缀
 @CrossOrigin(origins = "*")  // 允许跨域访问

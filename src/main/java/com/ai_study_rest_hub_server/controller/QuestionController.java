@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -40,17 +41,16 @@ import java.util.stream.Collectors;
  * @version 1.0
  */
 @Slf4j
+@RequiredArgsConstructor
 @RestController  // @Controller + @ResponseBody，表示这是一个REST控制器，返回JSON数据
 @RequestMapping("/api/questions")  // 设置基础URL路径，所有方法的URL都以此开头
 @CrossOrigin(origins = "*")  // 允许跨域访问，解决前后端分离开发中的跨域问题
 @Tag(name = "题目管理", description = "题目相关的增删改查操作，包括分页查询、随机获取、热门推荐等功能")  // Swagger标签，用于分组显示API
 public class QuestionController {
 
-    @Autowired
-    private QuestionService questionService;
+    private final QuestionService questionService;
 
-    @Autowired
-    private QuestionMapper questionMapper;
+    private final QuestionMapper questionMapper;
     /**
      * 分页查询题目列表（支持多条件筛选）
      * 

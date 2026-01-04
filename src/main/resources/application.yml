@@ -2,11 +2,11 @@ server:
   port: 8080
 spring:
   datasource:
-    driver-class-name: ${leadingsoul.datasource.driver-class-name}
-    type: ${leadingsoul.datasource.type}
-    url: ${leadingsoul.datasource.url}
-    username: ${leadingsoul.datasource.username}
-    password: ${leadingsoul.datasource.password}
+    driver-class-name: ${leading.datasource.driver-class-name}
+    type: ${leading.datasource.type}
+    url: ${leading.datasource.url}
+    username: ${leading.datasource.username}
+    password: ${leading.datasource.password}
     hikari:
       connection-test-query: SELECT 1 # 自动检测连接
       connection-timeout: 60000 #数据库连接超时时间,默认30秒
@@ -24,24 +24,24 @@ spring:
       max-request-size: 20MB
   data:
     redis:
-      host: ${leadingsoul.data.redis.host}
-      port: ${leadingsoul.data.redis.port}
-      database: ${leadingsoul.data.redis.database}
+      host: ${leading.data.redis.host}
+      port: ${leading.data.redis.port}
+      database: ${leading.data.redis.database}
   application:
     name: AI_Study_Rest_Hub
+  profiles:
+    active: dev
   ai:
     openai:
-      api-key: ${leadingsoul.ai.openai.api-key}
-      base-url: ${leadingsoul.ai.openai.base-url}
+      api-key: ${leading.ai.openai.api-key}
+      base-url: ${leading.ai.openai.base-url}
       chat:
         options:
-          model: ${leadingsoul.ai.openai.chat.options.model}
-          temperature: ${leadingsoul.ai.openai.chat.options.temperature}
-          max-tokens: ${leadingsoul.ai.openai.chat.options.max-tokens}
-          top-p: ${leadingsoul.ai.openai.chat.options.top-p}
-          top-k: ${leadingsoul.ai.openai.chat.options.top-k}
-          FrequencyPenalty: ${leadingsoul.ai.openai.chat.options.FrequencyPenalty}
-          ThinkingBudget: ${leadingsoul.ai.openai.chat.options.ThinkingBudget}
+          model: ${leading.ai.openai.chat.options.model}
+          temperature: ${leading.ai.openai.chat.options.temperature}
+          max-tokens: ${leading.ai.openai.chat.options.max-tokens}
+          top-p: ${leading.ai.openai.chat.options.top-p}
+          FrequencyPenalty: ${leading.ai.openai.chat.options.FrequencyPenalty}
 springdoc:
   default-flat-param-object: true
 mybatis-plus:

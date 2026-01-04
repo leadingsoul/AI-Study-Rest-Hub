@@ -2,6 +2,7 @@ package com.ai_study_rest_hub_server.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -22,6 +23,7 @@ import java.nio.file.Paths;
  * 提供本地上传文件的HTTP访问服务
  */
 @Slf4j
+@RequiredArgsConstructor
 @RestController
 @RequestMapping("/files")
 @CrossOrigin
