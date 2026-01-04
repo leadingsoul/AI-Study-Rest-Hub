@@ -17,13 +17,13 @@ public class BaseEntity implements Serializable {
     private Long id;
 
     @Schema(description = "创建时间")
-    @JsonIgnore
     @TableField(value = "create_time", fill = FieldFill.INSERT)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date createTime;
 
     @Schema(description = "更新时间")
-    @JsonIgnore
     @TableField(value = "update_time", fill = FieldFill.UPDATE)
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private Date updateTime;
 
     @Schema(description = "逻辑删除")

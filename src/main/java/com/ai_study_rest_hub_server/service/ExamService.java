@@ -30,5 +30,6 @@ public interface ExamService extends IService<ExamRecord> {
     void RemoveById(Integer id);
 
     List<ExamRankingVO> getExamRanking(Integer paperId, Integer limit);
+
 }
  

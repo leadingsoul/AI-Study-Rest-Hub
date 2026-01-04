@@ -3,6 +3,7 @@ package com.ai_study_rest_hub_server.controller;
 import com.ai_study_rest_hub_server.common.Result;
 import com.ai_study_rest_hub_server.entity.Notice;
 import com.ai_study_rest_hub_server.service.NoticeService;
+import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -37,8 +38,9 @@ public class NoticeController {
     @GetMapping("/active")  // 处理GET请求
     @Operation(summary = "获取启用的公告", description = "获取状态为启用的公告列表，供前台首页展示使用")  // API描述
     public Result<List<Notice>> getActiveNotices() {
-        //return noticeService.getActiveNotices();
-        return Result.success(null);
+        List<Notice> noticeList = noticeService.getActiveNotices();
+        log.info("获取启用的公告:{}", noticeList);
+        return Result.success(noticeList);
     }
     
     /**
@@ -50,8 +52,9 @@ public class NoticeController {
     @Operation(summary = "获取最新公告", description = "获取最新发布的公告列表，用于首页推荐展示")  // API描述
     public Result<List<Notice>> getLatestNotices(
             @Parameter(description = "限制数量", example = "5") @RequestParam(defaultValue = "5") int limit) {
-        //return noticeService.getLatestNotices(limit);
-        return Result.success(null);
+        List<Notice> noticeList = noticeService.getLatestNotices(limit);
+        log.info("获取最新的{}条公告:{}", limit, noticeList);
+        return Result.success(noticeList);
     }
     
     /**
@@ -61,8 +64,9 @@ public class NoticeController {
     @GetMapping("/list")  // 处理GET请求
     @Operation(summary = "获取所有公告", description = "获取所有公告列表，包括启用和禁用的，供管理后台使用")  // API描述
     public Result<List<Notice>> getAllNotices() {
-        //return noticeService.getAllNotices();
-        return Result.success(null);
+        List<Notice> noticeList = noticeService.getAllNotices();
+        log.info("获取所有公告数量:{}", noticeList.size());
+        return Result.success(noticeList);
     }
     
     /**
@@ -90,8 +94,9 @@ public class NoticeController {
     @PostMapping("/add")  // 处理POST请求
     @Operation(summary = "发布新公告", description = "创建并发布新的系统公告")  // API描述
     public Result<String> addNotice(@RequestBody Notice notice) {
-        //return noticeService.addNotice(notice);
-        return Result.success(null);
+        String noticeContent = noticeService.addNotice(notice);
+        log.info("{}", noticeContent);
+        return Result.success(noticeContent);
     }
     
     /**
@@ -102,8 +107,9 @@ public class NoticeController {
     @PutMapping("/update")  // 处理PUT请求
     @Operation(summary = "更新公告信息", description = "修改公告的内容、标题、类型等信息")  // API描述
     public Result<String> updateNotice(@RequestBody Notice notice) {
-        //return noticeService.updateNotice(notice);
-        return Result.success(null);
+        String noticeContent = noticeService.updateNotice(notice);
+        log.info("{}", noticeContent);
+        return Result.success(noticeContent);
     }
     
     /**
@@ -115,8 +121,9 @@ public class NoticeController {
     @Operation(summary = "删除公告", description = "根据ID删除指定的公告")  // API描述
     public Result<String> deleteNotice(
             @Parameter(description = "公告ID") @PathVariable Long id) {
-        //return noticeService.deleteNotice(id);
-        return Result.success(null);
+        String noticeContent = noticeService.deleteNotice(id);
+        log.info("{}", noticeContent);
+        return Result.success(noticeContent);
     }
     
     /**
@@ -130,7 +137,8 @@ public class NoticeController {
     public Result<String> toggleNoticeStatus(
             @Parameter(description = "公告ID") @PathVariable Long id, 
             @Parameter(description = "是否启用，true为启用，false为禁用") @RequestParam Boolean isActive) {
-        //return noticeService.toggleNoticeStatus(id, isActive);
-        return Result.success(null);
+        String noticeContent = noticeService.toggleNoticeStatus(id, isActive);
+        log.info("{}", noticeContent);
+        return Result.success(noticeContent);
     }
 } 

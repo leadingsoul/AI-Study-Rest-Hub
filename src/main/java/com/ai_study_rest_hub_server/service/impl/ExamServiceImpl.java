@@ -144,6 +144,7 @@ public class ExamServiceImpl extends ServiceImpl<ExamRecordMapper, ExamRecord> i
         return examRecordMapper.queryRanking(paperId,limit);
     }
 
+
     private void gradeExam(Integer examRecordId) throws InterruptedIOException {
         //1.获取考试记录和相关的信息（试卷和答题记录）
         ExamRecord examRecord = getExamRecordById(examRecordId);

@@ -63,7 +63,7 @@ public class CategoryController {
     public Result<Void> addCategory(@RequestBody Category category) {
         categoryService.addCategory(category);
         log.info("添加新分类:{}",category);
-        return Result.success(null);
+        return Result.success("添加新分类成功");
     }
 
     /**
@@ -76,7 +76,7 @@ public class CategoryController {
     public Result<Void> updateCategory(@RequestBody Category category) {
         categoryService.updateCategory(category);
         log.info("更新分类:{}",category);
-        return Result.success(null);
+        return Result.success("更新分类成功");
     }
 
     /**
@@ -89,6 +89,6 @@ public class CategoryController {
     public Result<Void> deleteCategory(
             @Parameter(description = "分类ID") @PathVariable Long id) {
         categoryService.deleteCategory(id);
-        return Result.success(null);
+        return Result.success("删除分类成功");
     }
 } 

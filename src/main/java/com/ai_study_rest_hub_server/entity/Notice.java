@@ -37,7 +37,7 @@ public class Notice extends BaseEntity{
     /**
      * 是否启用
      */
-    private boolean isActive;
+    private Boolean isActive;
 
 
     @Override
