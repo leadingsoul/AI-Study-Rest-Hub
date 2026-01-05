@@ -1,6 +1,7 @@
 package com.ai_study_rest_hub_server.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.util.Date;
@@ -43,6 +44,9 @@ public class GuessTopic extends BaseEntity{
      *  目标词 
      */
     private String target;
+
+    @TableField(exist = false)
+    private String categoryName;
 
     @Override
     public boolean equals(Object that) {

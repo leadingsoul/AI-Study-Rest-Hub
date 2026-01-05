@@ -21,4 +21,28 @@
         id,topic_name,topic_description,category_id,record_count,difficulty,
         target,create_time,update_time,is_deleted
     </sql>
+
+    <select id="getTopicList" resultMap="BaseResultMap">
+        SELECT gt.*, gtc.name as category_name
+        FROM guess_topics gt
+        LEFT JOIN guess_categories gtc ON gt.category_id = gtc.id
+        WHERE gt.is_deleted = 0
+        <!-- 按分类ID筛选 -->
+        <if test="categoryId != null">
+            AND gt.category_id = #{categoryId}
+        </if>
+        <!-- 按难度筛选 -->
+        <if test="difficulty != null and difficulty != ''">
+            AND gt.difficulty = #{difficulty}
+        </if>
+        <!-- 按关键词模糊搜索（标题/内容/答案） -->
+        <if test="keyword != null and keyword != ''">
+            AND (gt.topic_name LIKE concat('%', #{keyword}, '%')
+            OR gt.topic_description LIKE concat('%', #{keyword}, '%')
+            OR gt.target LIKE concat('%', #{keyword}, '%'))
+        </if>
+        <!-- 排序 -->
+        ORDER BY gt.create_time DESC
+    </select>
+
 </mapper>
