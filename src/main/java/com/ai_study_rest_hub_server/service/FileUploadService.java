@@ -20,4 +20,11 @@ public interface FileUploadService {
      * @return 返回图片可访问地址
      */
     String uploadFile(MultipartFile file, String folder) throws ServerException, InsufficientDataException, ErrorResponseException, IOException, NoSuchAlgorithmException, InvalidKeyException, InvalidResponseException, XmlParserException, InternalException;
+
+    /**
+     * 删除文件的方法
+     * @param fileUrl 文件的URL路径
+     * @return 删除成功返回true，删除失败返回false
+     */
+    boolean deleteFile(String fileUrl);
 }

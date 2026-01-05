@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -49,9 +48,8 @@ public class VideoController {
             @Parameter(description = "分类ID") @RequestParam(required = false) Long categoryId,
             @Parameter(description = "搜索关键字") @RequestParam(required = false) String keyword,
             HttpServletRequest request) {
-        //IPage<Video> result = videoService.getPublishedVideos(page, size, categoryId, keyword, request);
-        //return Result.success(result);
-        return Result.success(null);
+        IPage<Video> result = videoService.getPublishedVideos(page, size, categoryId, keyword, request);
+        return Result.success(result);
     }
 
     /**
@@ -65,9 +63,8 @@ public class VideoController {
     public Result<Video> getVideoDetail(
             @Parameter(description = "视频ID") @PathVariable Long id,
             HttpServletRequest request) {
-//        Video video = videoService.getVideoDetail(id, request);
-//        return Result.success(video);
-        return Result.success(null);
+        Video video = videoService.getVideoDetail(id, request);
+        return Result.success(video);
     }
 
     /**
@@ -79,9 +76,8 @@ public class VideoController {
     @Operation(summary = "获取热门视频", description = "根据观看次数获取热门视频列表")
     public Result<List<Video>> getPopularVideos(
             @Parameter(description = "限制数量，默认10") @RequestParam(defaultValue = "10") Integer limit) {
-//        List<Video> videos = videoService.getPopularVideos(limit);
-//        return Result.success(videos);
-        return Result.success(null);
+        List<Video> videos = videoService.getPopularVideos(limit);
+        return Result.success(videos);
     }
 
     /**
@@ -93,9 +89,8 @@ public class VideoController {
     @Operation(summary = "获取最新视频", description = "根据发布时间获取最新视频列表")
     public Result<List<Video>> getLatestVideos(
             @Parameter(description = "限制数量，默认10") @RequestParam(defaultValue = "10") Integer limit) {
-//        List<Video> videos = videoService.getLatestVideos(limit);
-//        return Result.success(videos);
-        return Result.success(null);
+        List<Video> videos = videoService.getLatestVideos(limit);
+        return Result.success(videos);
     }
 
     /**
@@ -111,9 +106,8 @@ public class VideoController {
             @Parameter(description = "视频ID") @PathVariable Long videoId,
             @Parameter(description = "观看时长（秒）") @RequestParam Integer viewDuration,
             HttpServletRequest request) {
-//        videoService.recordVideoView(videoId, viewDuration, request);
-//        return Result.success(null);
-        return Result.success(null);
+        videoService.recordVideoView(videoId, viewDuration, request);
+        return Result.success("观看记录成功");
     }
 
     /**
@@ -127,12 +121,11 @@ public class VideoController {
     public Result<Map<String, Object>> toggleVideoLike(
             @Parameter(description = "视频ID") @PathVariable Long videoId,
             HttpServletRequest request) {
-        //boolean isLiked = videoService.toggleVideoLike(videoId, request);
-//        return Result.success(Map.of(
-//            "isLiked", isLiked,
-//            "message", isLiked ? "点赞成功" : "取消点赞成功"
-//        ));
-        return Result.success(null);
+        boolean isLiked = videoService.toggleVideoLike(videoId, request);
+        return Result.success(Map.of(
+            "isLiked", isLiked,
+            "message", isLiked ? "点赞成功" : "取消点赞成功"
+        ));
     }
 
     /**
@@ -168,8 +161,7 @@ public class VideoController {
         video.setUploaderName(uploaderName);
         video.setDuration(duration);
         
-//        Map<String, Object> result = videoService.submitVideo(video, videoFile, coverFile);
-//        return Result.success(result);
-        return Result.success(null);
+        Map<String, Object> result = videoService.submitVideo(video, videoFile, coverFile);
+        return Result.success(result);
     }
 } 

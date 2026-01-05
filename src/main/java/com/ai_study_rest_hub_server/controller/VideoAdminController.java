@@ -46,9 +46,8 @@ public class VideoAdminController {
             @Parameter(description = "状态：0-待审核，1-已发布，2-已拒绝，3-已下架") @RequestParam(required = false) Integer status,
             @Parameter(description = "上传者类型：1-用户投稿，2-管理员上传") @RequestParam(required = false) Integer uploaderType,
             @Parameter(description = "搜索关键字") @RequestParam(required = false) String keyword) {
-//        IPage<Video> result = videoService.getVideosForAdmin(page, size, status, uploaderType, keyword);
-//        return Result.success(result);
-        return Result.success(null);
+        IPage<Video> result = videoService.getVideosForAdmin(page, size, status, uploaderType, keyword);
+        return Result.success(result);
     }
 
     /**
@@ -87,9 +86,8 @@ public class VideoAdminController {
         // TODO: 从当前登录用户获取管理员ID，这里暂时使用固定值
         Long adminId = 1L;
         
-//        Map<String, Object> result = videoService.uploadVideoByAdmin(video, videoFile, coverFile, adminId);
-//        return Result.success(result);
-        return Result.success(null);
+        Map<String, Object> result = videoService.uploadVideoByAdmin(video, videoFile, coverFile, adminId);
+        return Result.success(result);
     }
 
     /**
@@ -108,9 +106,7 @@ public class VideoAdminController {
         
         // TODO: 从当前登录用户获取管理员ID，这里暂时使用固定值
         Long adminId = 1L;
-        
-//        videoService.auditVideo(videoId, status, reason, adminId);
-//        return Result.success(null);
+        videoService.auditVideo(videoId, status, reason, adminId);
         return Result.success(null);
     }
 
@@ -127,8 +123,7 @@ public class VideoAdminController {
         // TODO: 从当前登录用户获取管理员ID，这里暂时使用固定值
         Long adminId = 1L;
         
-//        videoService.offlineVideo(videoId, adminId);
-//        return Result.success(null);
+        videoService.offlineVideo(videoId, adminId);
         return Result.success(null);
     }
 
@@ -142,8 +137,7 @@ public class VideoAdminController {
     public Result<Void> deleteVideo(
             @Parameter(description = "视频ID") @PathVariable Long videoId) {
         
-//        videoService.deleteVideo(videoId);
-//        return Result.success(null);
+        videoService.deleteVideo(videoId);
         return Result.success(null);
     }
 
@@ -154,9 +148,8 @@ public class VideoAdminController {
     @GetMapping("/statistics")
     @Operation(summary = "获取视频统计", description = "获取视频相关的统计数据，用于仪表板展示")
     public Result<Map<String, Object>> getVideoStatistics() {
-//        Map<String, Object> statistics = videoService.getVideoStatistics();
-//        return Result.success(statistics);
-        return Result.success(null);
+        Map<String, Object> statistics = videoService.getVideoStatistics();
+        return Result.success(statistics);
     }
 
     /**
@@ -171,8 +164,7 @@ public class VideoAdminController {
             @Parameter(description = "视频ID") @PathVariable Long videoId,
             @Parameter(description = "统计天数，默认30天") @RequestParam(defaultValue = "30") Integer days) {
         
-//        Map<String, Object> stats = videoService.getVideoDetailStats(videoId, days);
-//        return Result.success(stats);
-        return Result.success(null);
+        Map<String, Object> stats = videoService.getVideoDetailStats(videoId, days);
+        return Result.success(stats);
     }
 } 

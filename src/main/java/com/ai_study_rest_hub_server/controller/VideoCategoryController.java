@@ -35,8 +35,7 @@ public class VideoCategoryController {
     @GetMapping
     @Operation(summary = "获取分类列表", description = "获取所有视频分类列表，包含每个分类下的视频数量统计")
     public Result<List<VideoCategory>> getCategories() {
-        //return Result.success(videoCategoryService.getAllCategories());
-        return Result.success(null);
+        return Result.success(videoCategoryService.getAllCategories());
     }
 
     /**
@@ -46,8 +45,7 @@ public class VideoCategoryController {
     @GetMapping("/tree")
     @Operation(summary = "获取分类树形结构", description = "获取视频分类的树形层级结构，用于前端组件展示")
     public Result<List<VideoCategory>> getCategoryTree() {
-        //return Result.success(videoCategoryService.getCategoryTree());
-        return Result.success(null);
+        return Result.success(videoCategoryService.getCategoryTree());
     }
 
     /**
@@ -57,8 +55,7 @@ public class VideoCategoryController {
     @GetMapping("/top")
     @Operation(summary = "获取顶级分类", description = "获取所有启用的顶级分类，用于导航菜单")
     public Result<List<VideoCategory>> getTopCategories() {
-        //return Result.success(videoCategoryService.getTopCategories());
-        return Result.success(null);
+        return Result.success(videoCategoryService.getTopCategories());
     }
 
     /**
@@ -70,8 +67,7 @@ public class VideoCategoryController {
     @Operation(summary = "获取子分类", description = "根据父级分类ID获取其下的子分类列表")
     public Result<List<VideoCategory>> getChildCategories(
             @Parameter(description = "父级分类ID") @PathVariable Long parentId) {
-        //return Result.success(videoCategoryService.getChildCategories(parentId));
-        return Result.success(null);
+        return Result.success(videoCategoryService.getChildCategories(parentId));
     }
 
     /**
@@ -83,8 +79,7 @@ public class VideoCategoryController {
     @Operation(summary = "获取分类详情", description = "根据分类ID获取详细信息，包含视频数量和父级分类名称")
     public Result<VideoCategory> getCategoryById(
             @Parameter(description = "分类ID") @PathVariable Long id) {
-        //return Result.success(videoCategoryService.getCategoryById(id));
-        return Result.success(null);
+        return Result.success(videoCategoryService.getCategoryById(id));
     }
 
     /**
@@ -95,7 +90,7 @@ public class VideoCategoryController {
     @PostMapping
     @Operation(summary = "添加新分类", description = "创建新的视频分类，支持设置父分类实现层级结构")
     public Result<Void> addCategory(@RequestBody VideoCategory category) {
-        //videoCategoryService.addCategory(category);
+        videoCategoryService.addCategory(category);
         return Result.success(null);
     }
 
@@ -107,7 +102,7 @@ public class VideoCategoryController {
     @PutMapping
     @Operation(summary = "更新分类信息", description = "修改分类的名称、描述、排序等信息")
     public Result<Void> updateCategory(@RequestBody VideoCategory category) {
-        //videoCategoryService.updateCategory(category);
+        videoCategoryService.updateCategory(category);
         return Result.success(null);
     }
 
@@ -120,7 +115,7 @@ public class VideoCategoryController {
     @Operation(summary = "删除分类", description = "删除指定的视频分类，注意：删除前需确保分类下没有视频")
     public Result<Void> deleteCategory(
             @Parameter(description = "分类ID") @PathVariable Long id) {
-        //videoCategoryService.deleteCategory(id);
+        videoCategoryService.deleteCategory(id);
         return Result.success(null);
     }
 } 

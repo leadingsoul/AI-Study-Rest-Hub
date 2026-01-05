@@ -28,10 +28,62 @@
             <result property="updatedAt" column="updated_at" />
     </resultMap>
 
+    <resultMap id="VideoResultMap" type="com.ai_study_rest_hub_server.entity.Video">
+        <id column="id" property="id"/>
+        <result column="title" property="title"/>
+        <result column="tags" property="tags"/>
+        <result column="category_id" property="categoryId"/>
+        <result column="status" property="status"/>
+        <result column="created_at" property="createdAt"/>
+        <!-- 关联的分类名称 -->
+        <result column="category_name" property="categoryName"/>
+        <!-- 其他字段根据你的 Video 实体类补充 -->
+    </resultMap>
+
     <sql id="Base_Column_List">
         id,title,description,category_id,file_url,cover_url,
         duration,file_size,uploader_name,uploader_type,user_id,
         admin_id,status,audit_admin_id,audit_time,audit_reason,
         view_count,like_count,tags,created_at,updated_at
     </sql>
+
+    <select id="getPublishedVideos" resultMap="VideoResultMap">
+        select v.*, vc.name as category_name from videos v left join video_categories vc on v.category_id = vc.id
+        where v.status = 1
+        <if test="categoryId != null">
+            and v.category_id = #{categoryId}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            and (v.title like concat('%', #{keyword}, '%')
+                     or v.tags like concat('%', #{keyword}, '%'))
+        </if>
+        order by v.created_at desc
+    </select>
+    
+    <select id="getPopularVideos" resultMap="VideoResultMap">
+        select v.*, vc.name as category_name from videos v left join video_categories vc on v.category_id = vc.id
+        where v.status = 1 order by v.view_count desc limit #{limit}
+    </select>
+
+    <select id="getLatestVideos" resultMap="VideoResultMap">
+        select v.*, vc.name as category_name from videos v left join video_categories vc on v.category_id = vc.id
+        where v.status = 1 order by v.view_count desc limit #{limit}
+    </select>
+
+    <select id="getVideosForAdmin" resultMap="VideoResultMap">
+        select v.*, vc.name as category_name, u.real_name as audit_admin_name from videos v left join video_categories vc on v.category_id = vc.id
+                                                                              left join users u on v.audit_admin_id = u.id
+        where 1=1
+        <if test="status != null">
+            and v.status = #{status}
+        </if>
+        <if test="uploaderType != null">
+            and v.uploader_type = #{uploaderType}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            and (v.title like concat('%', #{keyword}, '%')
+                     or v.uploader_name like concat('%', #{keyword}, '%'))
+        </if>
+        order by v.created_at desc
+    </select>
 </mapper>

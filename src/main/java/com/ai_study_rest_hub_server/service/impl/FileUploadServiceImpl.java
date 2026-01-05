@@ -73,4 +73,50 @@ public class FileUploadServiceImpl implements FileUploadService {
         log.info("文件上传核心业务，完成{}文件上传，返回地址为：{}",objectName,url);
         return url;
     }
+
+    /**
+     * 删除MinIO桶内指定文件
+     * @param fileUrl 上传文件时返回的完整URL
+     * @return 是否删除成功
+     */
+    public boolean deleteFile(String fileUrl) {
+        try {
+            // 1. 解析URL，提取objectName（去掉端点和桶名部分）
+            String basePath = minioProperties.getEndPoint() + "/" + minioProperties.getBucketName() + "/";
+            if (!fileUrl.startsWith(basePath)) {
+                log.error("文件URL格式错误，无法解析：{}", fileUrl);
+                return false;
+            }
+            String objectName = fileUrl.substring(basePath.length());
+            log.debug("准备删除MinIO文件，对象名：{}", objectName);
+
+            // 2. 检查对象是否存在（可选，但建议做）
+            boolean objectExists = minioClient.statObject(
+                    StatObjectArgs.builder()
+                            .bucket(minioProperties.getBucketName())
+                            .object(objectName)
+                            .build()
+            ) != null;
+
+            if (!objectExists) {
+                log.warn("文件不存在，无需删除：{}", objectName);
+                return false;
+            }
+
+            // 3. 执行删除操作
+            minioClient.removeObject(
+                    RemoveObjectArgs.builder()
+                            .bucket(minioProperties.getBucketName())
+                            .object(objectName)
+                            .build()
+            );
+
+            log.info("成功删除MinIO文件：{}", objectName);
+            return true;
+
+        } catch (Exception e) {
+            log.error("删除MinIO文件失败：{}", fileUrl, e);
+            return false;
+        }
+    }
 }
