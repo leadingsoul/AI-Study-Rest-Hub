@@ -25,9 +25,10 @@ public class GuessTopicController {
             @Parameter(description = "页码，默认1") @RequestParam(defaultValue = "1") Integer page,
             @Parameter(description = "每页大小，默认10") @RequestParam(defaultValue = "10") Integer size,
             @Parameter(description = "猜词分类id") @RequestParam(required = false) Long categoryId,
+            @Parameter(description = "分类代码") @RequestParam(required = false) String topCategoryCode,
             @Parameter(description = "难度（EASY/MEDIUM/HARD）") @RequestParam(required = false) String difficulty,
             @Parameter(description = "搜索关键字") @RequestParam(required = false) String keyword) {
-        IPage<GuessTopic> result = guessTopicService.getTopicList(page, size, categoryId, difficulty, keyword);
+        IPage<GuessTopic> result = guessTopicService.getTopicList(page, size, categoryId, topCategoryCode, difficulty, keyword);
         return Result.success(result);
     }
 
@@ -50,5 +51,12 @@ public class GuessTopicController {
     public Result<Void> deleteTopic(@PathVariable Long id) {
         guessTopicService.deleteTopic(id);
         return Result.success(null);
+    }
+
+    @GetMapping("/random")
+    @Operation(summary = "随机获取题目",description = "点击分类节点后，获取该分类下随机一道猜词题目信息")
+    public Result<GuessTopic> getRandomTopic(@RequestParam Long categoryId) {
+        GuessTopic result = guessTopicService.getRandomTopic(categoryId);
+        return Result.success(result);
     }
 }

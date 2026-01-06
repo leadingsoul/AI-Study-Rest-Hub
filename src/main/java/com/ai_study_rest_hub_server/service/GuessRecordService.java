@@ -10,4 +10,9 @@ import com.baomidou.mybatisplus.extension.service.IService;
 */
 public interface GuessRecordService extends IService<GuessRecord> {
 
+    /**
+     * 保存猜测记录的方法
+     * @param guessRecord 包含猜测信息的记录对象
+     */
+    void saveRecord(GuessRecord guessRecord);
 }

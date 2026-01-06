@@ -1,5 +1,6 @@
 package com.ai_study_rest_hub_server.service.impl;
 
+import com.ai_study_rest_hub_server.entity.Category;
 import com.ai_study_rest_hub_server.entity.GuessCategory;
 import com.ai_study_rest_hub_server.mapper.GuessCategoryMapper;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
@@ -12,6 +13,10 @@ import com.ai_study_rest_hub_server.mapper.GuessTopicMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 /**
 * @author 刘博啸辉
@@ -28,9 +33,9 @@ public class GuessTopicServiceImpl extends ServiceImpl<GuessTopicMapper, GuessTo
     private final GuessCategoryMapper guessCategoryMapper;
 
     @Override
-    public IPage<GuessTopic> getTopicList(Integer page, Integer size, Long categoryId, String difficulty, String keyword) {
+    public IPage<GuessTopic> getTopicList(Integer page, Integer size, Long categoryId,String topCategoryCode ,String difficulty, String keyword) {
         Page<GuessTopic> pageObj= new Page<>(page, size);
-        IPage<GuessTopic> result = guessTopicMapper.getTopicList(pageObj, categoryId, difficulty, keyword);
+        IPage<GuessTopic> result = guessTopicMapper.getTopicList(pageObj, categoryId, topCategoryCode,difficulty, keyword);
         return result;
     }
 
@@ -74,6 +79,49 @@ public class GuessTopicServiceImpl extends ServiceImpl<GuessTopicMapper, GuessTo
             throw new RuntimeException("题目不存在");
         }
         guessTopicMapper.deleteById(id);
+    }
+
+    @Override
+    public GuessTopic getRandomTopic(Long categoryId) {
+        // 1. 获取当前分类ID及其所有子分类ID列表
+        List<Long> categoryIds = getAllCategoryIdsWithChildren(categoryId);
+        // 校验分类ID列表是否为空
+        if (categoryIds == null || categoryIds.isEmpty()) {
+            return null;
+        }
+        // 2. 查询所有指定分类（含子类）下的题目
+        List<GuessTopic> topics = guessTopicMapper.selectList(
+                new QueryWrapper<GuessTopic>()
+                        .in("category_id", categoryIds)
+        );
+        if (topics == null || topics.isEmpty()) {
+            return null; // 没有找到题目，返回null
+        }
+        Collections.shuffle(topics);
+        return topics.get(0);
+    }
+
+    /**
+     * 获取指定分类ID及其所有子分类的ID列表
+     * @param categoryId 父分类ID
+     * @return 包含父分类和所有子分类的ID列表
+     */
+    private List<Long> getAllCategoryIdsWithChildren(Long categoryId) {
+        List<Long> categoryIds = new ArrayList<>();
+        // 先添加当前分类ID
+        categoryIds.add(categoryId);
+        // 查询当前分类的直接子分类
+        List<Long> childIds = guessCategoryMapper.selectList(
+                new QueryWrapper<GuessCategory>()
+                        .eq("parent_id", categoryId)
+                        .select("id")
+        ).stream().map(GuessCategory::getId).toList();
+
+        // 递归添加所有子分类的ID
+        for (Long childId : childIds) {
+            categoryIds.addAll(getAllCategoryIdsWithChildren(childId));
+        }
+        return categoryIds;
     }
 }
 

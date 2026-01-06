@@ -21,7 +21,7 @@ public interface GuessTopicService extends IService<GuessTopic> {
      * @param keyword 关键词，用于搜索主题标题或内容
      * @return 返回一个IPage类型的GuessTopic对象，包含分页信息和主题列表数据
      */
-    IPage<GuessTopic> getTopicList(Integer page, Integer size, Long categoryId, String difficulty, String keyword);
+    IPage<GuessTopic> getTopicList(Integer page, Integer size, Long categoryId, String topCategoryCode, String difficulty, String keyword);
 
     /**
      * 保存主题信息的方法
@@ -43,4 +43,11 @@ public interface GuessTopicService extends IService<GuessTopic> {
      * @param id 主题的唯一标识符，用于定位要删除的主题
      */
     void deleteTopic(Long id);
+
+    /**
+     * 根据分类ID获取随机主题
+     * @param categoryId 分类ID，用于筛选指定分类下的主题
+     * @return 返回一个随机选择的主题对象
+     */
+    GuessTopic getRandomTopic(Long categoryId);
 }

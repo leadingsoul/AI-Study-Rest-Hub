@@ -1,16 +1,13 @@
 package com.ai_study_rest_hub_server.service.impl;
 
-import com.ai_study_rest_hub_server.constant.StatusConstant;
 import com.ai_study_rest_hub_server.service.FileUploadService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ai_study_rest_hub_server.entity.Banner;
 import com.ai_study_rest_hub_server.service.BannerService;
 import com.ai_study_rest_hub_server.mapper.BannerMapper;
 import io.minio.errors.*;
-import io.netty.util.internal.ObjectUtil;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;

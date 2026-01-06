@@ -10,6 +10,7 @@
             <result property="topicDescription" column="topic_description" />
             <result property="categoryId" column="category_id" />
             <result property="recordCount" column="record_count" />
+            <result property="topCategoryCode" column="top_category_code" />
             <result property="difficulty" column="difficulty" />
             <result property="target" column="target" />
             <result property="createTime" column="create_time" />
@@ -34,6 +35,9 @@
         <!-- 按难度筛选 -->
         <if test="difficulty != null and difficulty != ''">
             AND gt.difficulty = #{difficulty}
+        </if>
+        <if test="topCategoryCode!=null and topCategoryCode != ''">
+            AND gt.top_category_code = #{topCategoryCode}
         </if>
         <!-- 按关键词模糊搜索（标题/内容/答案） -->
         <if test="keyword != null and keyword != ''">

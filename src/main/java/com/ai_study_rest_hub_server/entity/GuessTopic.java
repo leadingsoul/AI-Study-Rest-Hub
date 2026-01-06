@@ -40,6 +40,8 @@ public class GuessTopic extends BaseEntity{
      */
     private String difficulty;
 
+    private String topCategoryCode;
+
     /**
      *  目标词 
      */

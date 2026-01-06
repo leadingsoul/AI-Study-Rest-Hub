@@ -13,7 +13,7 @@ import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 */
 public interface GuessTopicMapper extends BaseMapper<GuessTopic> {
 
-    IPage<GuessTopic> getTopicList(Page<GuessTopic> pageObj, Long categoryId, String difficulty, String keyword);
+    IPage<GuessTopic> getTopicList(Page<GuessTopic> pageObj, Long categoryId,String topCategoryCode, String difficulty, String keyword);
 }
 
 
