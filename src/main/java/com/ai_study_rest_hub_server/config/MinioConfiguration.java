@@ -1,6 +1,7 @@
 package com.ai_study_rest_hub_server.config;
 
 import io.minio.MinioClient;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
@@ -10,10 +11,11 @@ import com.ai_study_rest_hub_server.config.properties.MinioProperties;
 
 @EnableConfigurationProperties(MinioProperties.class)
 @Slf4j
+@RequiredArgsConstructor
 @Configuration
 public class MinioConfiguration {
-    @Autowired
-    private MinioProperties minioProperties;
+
+    private final MinioProperties minioProperties;
 
     @Bean
     public MinioClient minioClient() {

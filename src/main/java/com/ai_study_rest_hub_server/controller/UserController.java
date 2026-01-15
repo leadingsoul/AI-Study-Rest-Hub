@@ -2,10 +2,13 @@ package com.ai_study_rest_hub_server.controller;
 
 
 import com.ai_study_rest_hub_server.common.Result;
+import com.ai_study_rest_hub_server.config.properties.JwtProperties;
+import com.ai_study_rest_hub_server.constant.JwtClaimsConstant;
 import com.ai_study_rest_hub_server.dto.LoginRequest;
 import com.ai_study_rest_hub_server.dto.LoginResponse;
 import com.ai_study_rest_hub_server.entity.User;
 import com.ai_study_rest_hub_server.service.UserService;
+import com.ai_study_rest_hub_server.utils.JwtUtil;
 import com.ai_study_rest_hub_server.vo.LoginRequestVo;
 import com.ai_study_rest_hub_server.vo.LoginResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +18,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 
@@ -31,7 +36,7 @@ import java.util.UUID;
 public class UserController {
 
     private final UserService userService;
-
+    private final JwtProperties jwtProperties;
     /**
      * 用户登录
      * @param loginRequest 登录请求
@@ -53,14 +58,21 @@ public class UserController {
         if (user == null) {
             return Result.error("用户名或密码错误");
         }
-
+        // 登录成功后，生成jwt令牌
+        Map<String, Object> claims = new HashMap<>();
+        claims.put(JwtClaimsConstant.USER_ID,user.getId());
+        String token = JwtUtil.createJWT(
+                jwtProperties.getAdminSecretKey(),
+                jwtProperties.getAdminTtl(),
+                claims
+        );
         // 构建登录响应
         LoginResponse response = new LoginResponse();
         response.setUserId(user.getId());
         response.setUsername(user.getUsername());
         response.setRealName(user.getRealName());
         response.setRole(user.getRole());
-        response.setToken(UUID.randomUUID().toString()); // 简单的token生成
+        response.setToken(token); // 简单的token生成
 
         return Result.success(response);
     }
