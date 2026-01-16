@@ -72,7 +72,7 @@ public class UserController {
         response.setUsername(user.getUsername());
         response.setRealName(user.getRealName());
         response.setRole(user.getRole());
-        response.setToken(token); // 简单的token生成
+        response.setToken(token);
 
         return Result.success(response);
     }

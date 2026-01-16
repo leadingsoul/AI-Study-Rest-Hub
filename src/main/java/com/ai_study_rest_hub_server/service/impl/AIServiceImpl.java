@@ -57,9 +57,11 @@ public class AIServiceImpl implements AIService {
      * 格式化对话历史为可读字符串
      */
     private String formatChatHistory(List<Map<String, String>> chatHistory) {
+        // 如果对话历史为空，则返回提示信息
         if (chatHistory == null || chatHistory.isEmpty()) {
             return "无对话历史";
         }
+        // 拼接对话历史字符串
         StringBuilder sb = new StringBuilder();
         for (Map<String, String> msg : chatHistory) {
             String role = "user".equals(msg.get("role")) ? "用户" : "AI";

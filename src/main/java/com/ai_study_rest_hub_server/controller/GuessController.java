@@ -21,7 +21,6 @@ import java.util.Map;
 @RequestMapping("/api/guess")
 public class GuessController {
 
-    private final ChatClient chatClient;
     private final AIService aiService;
 
     @PostMapping("/chat")
