@@ -1,22 +1,18 @@
 # AI Study Rest Hub
 
-一个“学习 + 休闲”一体化项目，包含前端已构建产物（`dist`）和 Spring Boot 后端服务（`AI_study_rest_hub_server`）。系统围绕题库练习、试卷考试、视频学习、公告轮播、AI 猜词等场景提供完整能力。
+一个“学习 + 休闲”一体化项目，包含前端已构建产物（`front-end`）和 Spring Boot 后端服务（`AI_study_rest_hub_server`）。系统围绕题库练习、试卷考试、视频学习、公告轮播、AI 猜词等场景提供完整能力。
 
 ## 项目结构
 
 ```text
 AI-Study-Rest-Hub/
-├─ nginx-1.20.2/html/dist/                      # 前端构建产物（Vue 打包结果）
+├─ front-end                   # 前端（Vue 项目）
 └─ AI_Study-Rest_Hub/AI_study_rest_hub_server/  # 后端服务（Spring Boot + MyBatis-Plus）
 ```
 
-## 一、前端（`dist`）分析
+## 一、前端（`front-end`）分析
 
-`dist` 目录为可直接部署的静态资源，已完成构建，入口文件为：
-
-- `index.html`
-- `assets/index-*.js`
-- `assets/index-*.css`
+`front-end` 目录为需要运行的资源，未完成构建
 
 页面/模块可从打包文件名识别，主要包括：
 
@@ -34,10 +30,7 @@ AI-Study-Rest-Hub/
 - 请求头自动携带 `Bearer Token`（从 `localStorage.userInfo.token` 读取）
 - 期望后端统一响应结构：`code === 200` 视为成功
 
-> 说明：当前只看到构建结果（`dist`），不包含前端源码工程（如 `src`、`package.json`、`vite.config`），因此该目录适合“部署”而非“二次开发”。
-
 ## 二、后端（`AI_study_rest_hub_server`）分析
-
 ## 技术栈
 
 - Java 17
@@ -52,7 +45,6 @@ AI-Study-Rest-Hub/
 - Redisson / Caffeine（缓存与并发能力）
 
 ## 核心业务模块（按 Controller 分组）
-
 - 用户认证：`/api/user/**`
   - 登录、登出、管理员权限校验
 - 题库管理：`/api/categories/**`、`/api/questions/**`
@@ -70,14 +62,11 @@ AI-Study-Rest-Hub/
   - 分类、题目、聊天、记录
 - 其他：`/api/stats/**`、`/files/**`
   - 统计接口、文件访问接口
-
 ## 配置与运行信息
-
 主要配置文件：
 
 - `src/main/resources/application.yml`
 - `src/main/resources/application-dev.yml`
-
 默认服务端口：
 
 - `8080`
@@ -97,10 +86,9 @@ AI-Study-Rest-Hub/
 mvn clean package
 mvn spring-boot:run
 ```
+### 前端部署（front-end）
 
-### 前端部署（dist）
-
-将 `nginx-1.20.2/html/dist` 作为静态站点根目录即可（Nginx/静态文件服务器均可）。  
+将front-end打包放入`nginx-1.20.2/html/` 作为静态站点根目录即可（Nginx/静态文件服务器均可）。  
 如果后端地址不是 `http://localhost:8080`，需通过网关/反向代理或重新构建前端来调整 API 目标地址。
 
 ## 三、系统联调建议
@@ -118,7 +106,6 @@ mvn spring-boot:run
 ## 五、可继续完善的方向
 
 - 增加根目录 `docker-compose.yml`（MySQL + Redis + MinIO + backend + nginx）实现一键启动
-- 将敏感配置迁移到 `.env`/密钥管理服务
 - 补充数据库初始化脚本与版本迁移（Flyway/Liquibase）
 - 为关键接口增加自动化测试与压测脚本
 
