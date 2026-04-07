@@ -1,6 +1,6 @@
 # AI Study Rest Hub
 
-一个“学习 + 休闲”一体化项目，包含前端已构建产物（`front-end`）和 Spring Boot 后端服务（`AI_study_rest_hub_server`）。系统围绕题库练习、试卷考试、视频学习、公告轮播、AI 猜词等场景提供完整能力。
+一个“学习 + 休闲”一体化项目，包含前端（`front-end`）和 Spring Boot 后端服务（`AI_study_rest_hub_server`）。系统围绕题库练习、试卷考试、视频学习、公告轮播、AI 猜词等场景提供完整能力。
 
 ## 项目结构
 
