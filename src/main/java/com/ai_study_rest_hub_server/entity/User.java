@@ -25,6 +25,11 @@ public class User extends BaseEntity{
     private String password;
 
     /**
+     * 加盐
+     */
+    private String salt;
+
+    /**
      * 
      */
     private String realName;
@@ -54,6 +59,7 @@ public class User extends BaseEntity{
         return (this.getId() == null ? other.getId() == null : this.getId().equals(other.getId()))
             && (this.getUsername() == null ? other.getUsername() == null : this.getUsername().equals(other.getUsername()))
             && (this.getPassword() == null ? other.getPassword() == null : this.getPassword().equals(other.getPassword()))
+            && (this.getSalt() == null ? other.getSalt() == null : this.getSalt().equals(other.getSalt()))
             && (this.getRealName() == null ? other.getRealName() == null : this.getRealName().equals(other.getRealName()))
             && (this.getRole() == null ? other.getRole() == null : this.getRole().equals(other.getRole()))
             && (this.getStatus() == null ? other.getStatus() == null : this.getStatus().equals(other.getStatus()))
@@ -69,6 +75,7 @@ public class User extends BaseEntity{
         result = prime * result + ((getId() == null) ? 0 : getId().hashCode());
         result = prime * result + ((getUsername() == null) ? 0 : getUsername().hashCode());
         result = prime * result + ((getPassword() == null) ? 0 : getPassword().hashCode());
+        result = prime * result + ((getSalt() == null) ? 0 : getSalt().hashCode());
         result = prime * result + ((getRealName() == null) ? 0 : getRealName().hashCode());
         result = prime * result + ((getRole() == null) ? 0 : getRole().hashCode());
         result = prime * result + ((getStatus() == null) ? 0 : getStatus().hashCode());
@@ -86,6 +93,7 @@ public class User extends BaseEntity{
         sb.append("Hash = ").append(hashCode());
         sb.append(", username=").append(username);
         sb.append(", password=").append(password);
+        sb.append(", salt=").append(salt);
         sb.append(", realName=").append(realName);
         sb.append(", role=").append(role);
         sb.append(", status=").append(status);

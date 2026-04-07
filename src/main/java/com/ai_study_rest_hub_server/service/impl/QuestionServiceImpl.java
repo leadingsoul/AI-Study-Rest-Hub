@@ -7,11 +7,12 @@ import com.ai_study_rest_hub_server.entity.QuestionChoice;
 import com.ai_study_rest_hub_server.mapper.PaperQuestionMapper;
 import com.ai_study_rest_hub_server.mapper.QuestionAnswerMapper;
 import com.ai_study_rest_hub_server.mapper.QuestionChoiceMapper;
-import com.ai_study_rest_hub_server.utils.ExcelUtil;
+import com.ai_study_rest_hub_server.utils.ExcelUtils;
 import com.ai_study_rest_hub_server.utils.RedisUtils;
 import com.ai_study_rest_hub_server.vo.QuestionImportVo;
 import com.ai_study_rest_hub_server.vo.QuestionQueryVo;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.ai_study_rest_hub_server.entity.Question;
@@ -19,10 +20,11 @@ import com.ai_study_rest_hub_server.service.QuestionService;
 import com.ai_study_rest_hub_server.mapper.QuestionMapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.ZSetOperations;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.util.CollectionUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +43,6 @@ import java.util.stream.Collectors;
 public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
     implements QuestionService {
 
-    private final QuestionMapper questionMapper;
     private final QuestionChoiceMapper questionChoiceMapper;
     private final QuestionAnswerMapper questionAnswerMapper;
     private final RedisUtils redisUtils;
@@ -188,33 +189,57 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
 
     @Override
     public List<Question> getPopularQuestions(Integer size) {
-        //定义列表
-        List<Question> questions = new ArrayList<>();
-        //从缓存中获取数据
-        Set<Object> popularIds = redisUtils.zReverseRange(CacheConstants.POPULAR_QUESTIONS_KEY,0,size-1);
-        //定义接收id的集合
-        List<Long> ids = popularIds.stream().map(id->Long.valueOf(id.toString())).collect(Collectors.toList());
-        //处理热门题目
-        //List<Question> questions = listByIds(ids);
-        for(Long id:ids){
-            Question question = getById(id);
-            if(question!=null){
-                questions.add(question);
-            }
+        // 1. 非法参数校验
+        if (size == null || size <= 0 || size > 50) {
+            size = 10; // 默认值 + 上限保护
         }
+
+        // 2. 从Redis获取热门ID（一次查询）
+        Set<Object> popularIds = redisUtils.zReverseRange(CacheConstants.POPULAR_QUESTIONS_KEY, 0, size - 1);
+        if (CollectionUtils.isEmpty(popularIds)) {
+            return getBackupQuestions(size, Collections.emptyList());
+        }
+
+        // 3. 安全转换ID（避免空指针）
+        List<Long> ids = popularIds.stream()
+                .filter(Objects::nonNull)
+                .map(String::valueOf)
+                .filter(StringUtils::isNumeric)
+                .map(Long::valueOf)
+                .limit(size) // 保护上限
+                .collect(Collectors.toList());
+
+        // 4. 批量查询【一次SQL】（修复N+1问题）
+        List<Question> questions = listByIds(ids);
+        List<Long> existIds = questions.stream().map(Question::getId).collect(Collectors.toList());
+
+        // 5. 不足数量时，安全兜底查询
         int diff = size - questions.size();
-        if(diff>0){
-            LambdaQueryWrapper<Question> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-            lambdaQueryWrapper.orderByDesc(Question::getCreateTime);
-            List<Long> existQuestionId = questions.stream().map(Question::getId).collect(Collectors.toList());
-            lambdaQueryWrapper.notIn(!ObjectUtils.isEmpty(existQuestionId),Question::getId,existQuestionId);
-            //切割指定的diff条
-            lambdaQueryWrapper.last("limit "+diff);
-            List<Question> questionList = list(lambdaQueryWrapper);
-            questions.addAll(questionList);
+        if (diff > 0) {
+            List<Question> backupQuestions = getBackupQuestions(diff, existIds);
+            questions.addAll(backupQuestions);
         }
+
+        // 6. 填充详情
         fillQuestionChoiceAndAnswer(questions);
         return questions;
+    }
+
+    /**
+     * 安全的兜底查询方法（无SQL注入 + 批量查询）
+     */
+    private List<Question> getBackupQuestions(int limit, List<Long> excludeIds) {
+        LambdaQueryWrapper<Question> wrapper = new LambdaQueryWrapper<>();
+        wrapper.orderByDesc(Question::getCreateTime);
+
+        if (!CollectionUtils.isEmpty(excludeIds)) {
+            wrapper.notIn(Question::getId, excludeIds);
+        }
+
+        // 【修复SQL注入】使用MyBatis-Plus安全分页
+        Page<Question> page = new Page<>(1, limit);
+        IPage<Question> questionPage = page(page, wrapper);
+        return questionPage.getRecords();
     }
 
     @Override
@@ -245,7 +270,7 @@ public class QuestionServiceImpl extends ServiceImpl<QuestionMapper, Question>
         if(!fileName.endsWith(".xlsx")&&!fileName.endsWith(".xls")){
             throw new RuntimeException("预览的文件格式不正确");
         }
-        List<QuestionImportVo> questionImportVos = ExcelUtil.parseExcel(file);
+        List<QuestionImportVo> questionImportVos = ExcelUtils.parseExcel(file);
         return questionImportVos;
     }
 

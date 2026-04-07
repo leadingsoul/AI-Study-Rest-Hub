@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -48,15 +49,26 @@ public class FileUploadServiceImpl implements FileUploadService {
                     .config(config)
                     .build());
         }
-        //3. 处理上传的对象名（影响，minio桶中的文件结构！）
-        //现在： 桶名 / folder / ai.png  缺点： 所有文件都平铺（banner，video）不好区分！ 核心缺点，可能覆盖！
-        //小知识点： x/x/x.png -> exam0625 /x/x/ x.png
-        //解决覆盖问题： 确保对象和文件的名字唯一即可！！ uuid - - -
-        //1.需要添加文件夹 2.添加uuid确保不重复
-        String objectName = folder + "/" + new SimpleDateFormat("yyyyMMdd").format(new Date()) + "/" +
-                UUID.randomUUID().toString().replaceAll("-","")+"_"+ file.getOriginalFilename();
+        // 3. 处理上传的对象名（核心优化：确保路径符合MinIO规范，避免非法字符和连续斜杠）
+        // 3.1 清理文件夹参数：去除首尾斜杠、替换连续斜杠为单个斜杠
+        String cleanFolder = folder.trim().replaceAll("/+", "/").replaceAll("^/|/$", "");
+        // 3.2 获取日期路径（按年月日归档）
+        String datePath = new SimpleDateFormat("yyyyMMdd").format(new Date());
+        // 3.3 处理文件名：获取原始文件名，避免空文件名，过滤非法字符
+        String originalFilename = file.getOriginalFilename();
+        if (!StringUtils.hasText(originalFilename)) {
+            originalFilename = "unnamed_file_" + System.currentTimeMillis();
+            log.warn("文件原始名称为空，使用默认文件名：{}", originalFilename);
+        }
+        // 过滤文件名中的MinIO不支持的非法字符（核心：避免XMinioInvalidObjectName错误）
+        String validFilename = originalFilename.replaceAll("[\\\\:*?\"<>|^`%#]", "");
+        // 3.4 生成唯一标识（UUID），防止文件覆盖
+        String uniqueId = UUID.randomUUID().toString().replaceAll("-", "");
+        // 3.5 拼接对象名并最终清理路径（确保无连续斜杠，符合MinIO规范）
+        String objectName = String.join("/", cleanFolder, datePath, uniqueId + "_" + validFilename)
+                .replaceAll("/+", "/"); // 最终兜底，去除所有连续斜杠
 
-        log.debug("文件上传核心业务方法，处理后的文件对象名：{}",objectName);
+        log.debug("文件上传核心业务方法，处理后的合法文件对象名：{}", objectName);
 
         //4. 上传文件 putObject方法
         //putObject . 上传文件数据 .steam(文件输入流)
@@ -68,8 +80,11 @@ public class FileUploadServiceImpl implements FileUploadService {
                 .stream(file.getInputStream(),file.getSize(),-1) //-1 我们不指定文件切割大小！让minio自动处理！
                 .build());
 
-        //5. 拼接回显地址 【端点 + 桶 + 对象名】
-        String url = String.join("/", minioProperties.getEndPoint(), minioProperties.getBucketName(), objectName);
+        // 5. 拼接回显地址（核心优化：使用合规拼接方式，避免连续斜杠，兼容端点末尾带/或不带/的情况）
+        // 5.1 清理端点地址（去除末尾多余斜杠）
+        String cleanEndPoint = minioProperties.getEndPoint().trim().replaceAll("/+$", "");
+        // 5.2 合规拼接URL（端点 + 桶名 + 对象名，无连续斜杠）
+        String url = String.join("/", cleanEndPoint, minioProperties.getBucketName(), objectName);
         log.info("文件上传核心业务，完成{}文件上传，返回地址为：{}",objectName,url);
         return url;
     }
@@ -81,8 +96,15 @@ public class FileUploadServiceImpl implements FileUploadService {
      */
     public boolean deleteFile(String fileUrl) {
         try {
-            // 1. 解析URL，提取objectName（去掉端点和桶名部分）
-            String basePath = minioProperties.getEndPoint() + "/" + minioProperties.getBucketName() + "/";
+            // 1. 校验入参
+            if (!StringUtils.hasText(fileUrl)) {
+                log.error("删除文件URL为空，无法执行删除操作");
+                return false;
+            }
+
+            // 2. 解析URL，提取objectName（优化：兼容端点末尾带/或不带/的情况）
+            String cleanEndPoint = minioProperties.getEndPoint().trim().replaceAll("/+$", "");
+            String basePath = String.join("/", cleanEndPoint, minioProperties.getBucketName()) + "/";
             if (!fileUrl.startsWith(basePath)) {
                 log.error("文件URL格式错误，无法解析：{}", fileUrl);
                 return false;
@@ -90,7 +112,7 @@ public class FileUploadServiceImpl implements FileUploadService {
             String objectName = fileUrl.substring(basePath.length());
             log.debug("准备删除MinIO文件，对象名：{}", objectName);
 
-            // 2. 检查对象是否存在（可选，但建议做）
+            // 3. 检查对象是否存在（可选，但建议做）
             boolean objectExists = minioClient.statObject(
                     StatObjectArgs.builder()
                             .bucket(minioProperties.getBucketName())
@@ -103,7 +125,7 @@ public class FileUploadServiceImpl implements FileUploadService {
                 return false;
             }
 
-            // 3. 执行删除操作
+            // 4. 执行删除操作
             minioClient.removeObject(
                     RemoveObjectArgs.builder()
                             .bucket(minioProperties.getBucketName())

@@ -20,8 +20,8 @@ spring:
     time-zone: GMT+8
   servlet:
     multipart:
-      max-file-size: 10MB
-      max-request-size: 20MB
+      max-file-size: 200MB
+      max-request-size: 200MB
   data:
     redis:
       host: ${leading.data.redis.host}
@@ -32,16 +32,11 @@ spring:
   profiles:
     active: dev
   ai:
-    openai:
-      api-key: ${leading.ai.openai.api-key}
-      base-url: ${leading.ai.openai.base-url}
-      chat:
+    dashscope:
+      agent:
         options:
-          model: ${leading.ai.openai.chat.options.model}
-          temperature: ${leading.ai.openai.chat.options.temperature}
-          max-tokens: ${leading.ai.openai.chat.options.max-tokens}
-          top-p: ${leading.ai.openai.chat.options.top-p}
-          FrequencyPenalty: ${leading.ai.openai.chat.options.FrequencyPenalty}
+          app-id: ${leading.ai.dashscope.agent.api-id}
+      api-key: ${leading.ai.dashscope.api-key}
 springdoc:
   default-flat-param-object: true
 mybatis-plus:

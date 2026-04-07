@@ -51,7 +51,8 @@ public class Result<T> {
     
     @Schema(description = "响应数据，具体的业务数据内容")
     private T data;
-    
+
+
     // 手动添加getter和setter方法
     public Integer getCode() {
         return code;

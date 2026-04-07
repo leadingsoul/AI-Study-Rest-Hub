@@ -78,7 +78,7 @@ public class AIServiceImpl implements AIService {
                 // 使用 Spring AI ChatClient 发起请求
                 ChatResponse response = chatClient.prompt()
                         .user(prompt) // 设置用户提示词
-                        .call() // 同步调用（替代原block()）
+                        .call()
                         .chatResponse(); // 获取完整响应
 
                 // 解析响应结果

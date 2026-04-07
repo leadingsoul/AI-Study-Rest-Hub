@@ -19,11 +19,10 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
      */
     protected void addInterceptors(InterceptorRegistry registry) {
         log.info("注册自定义拦截器......");
-//        registry.addInterceptor(jwtTokenAdminInterceptor)
-//                .excludePathPatterns("/api/user/login",
-//                        "/doc.html",
-//                        "/webjars/**");
-    }
+            registry.addInterceptor(jwtTokenAdminInterceptor)
+                    .addPathPatterns("/api/categories/**");
+
+        }
 
     /**
      * 设置静态资源映射
@@ -32,5 +31,6 @@ public class WebMvcConfiguration extends WebMvcConfigurationSupport {
     protected void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/doc.html").addResourceLocations("classpath:/META-INF/resources/");
         registry.addResourceHandler("/webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
+        registry.addResourceHandler("/favicon.ico").addResourceLocations("classpath:/static");
     }
 }

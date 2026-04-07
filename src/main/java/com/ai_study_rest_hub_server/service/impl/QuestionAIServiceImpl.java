@@ -24,6 +24,7 @@ public class QuestionAIServiceImpl implements QuestionAIService {
 
     private final ChatClient chatClient;
 
+
     @Override
     public String buildPrompt(AiGenerateRequestVo request) {
         StringBuilder prompt = new StringBuilder();
@@ -129,7 +130,7 @@ public class QuestionAIServiceImpl implements QuestionAIService {
         //1. 校验工作
         //2. 调用方法生成提示词
         String prompt = buildPrompt(request);
-        //3. 调用kimi调用方法获取结果
+        //3. 调用AI方法获取结果
         String content = callAi(prompt);
         //4. 结果内容解析
         /*

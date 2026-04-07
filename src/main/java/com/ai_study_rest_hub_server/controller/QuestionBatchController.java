@@ -4,7 +4,7 @@ package com.ai_study_rest_hub_server.controller;
 import com.ai_study_rest_hub_server.common.Result;
 import com.ai_study_rest_hub_server.service.QuestionAIService;
 import com.ai_study_rest_hub_server.service.QuestionService;
-import com.ai_study_rest_hub_server.utils.ExcelUtil;
+import com.ai_study_rest_hub_server.utils.ExcelUtils;
 import com.ai_study_rest_hub_server.vo.AiGenerateRequestVo;
 import com.ai_study_rest_hub_server.vo.QuestionImportVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -12,12 +12,6 @@ import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -25,9 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InterruptedIOException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -54,7 +46,7 @@ public class QuestionBatchController {
     @Operation(summary = "下载Excel导入模板", description = "下载题目批量导入的Excel模板文件")  // API描述
     public ResponseEntity<byte[]> downloadTemplate() throws IOException {
         //1.获取下载模板字节数组
-        byte[] template = ExcelUtil.generateTemplate();
+        byte[] template = ExcelUtils.generateTemplate();
         //2.封装ResponseEntity
         ResponseEntity<byte[]> responseEntity = ResponseEntity.ok()
                 .header("Content-Disposition", "attachment;filename=question_import_template.xlsx")

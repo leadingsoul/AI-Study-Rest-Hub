@@ -1,7 +1,10 @@
 package com.ai_study_rest_hub_server.service;
 
+import com.ai_study_rest_hub_server.dto.LoginRequest;
+import com.ai_study_rest_hub_server.dto.LoginResponse;
 import com.ai_study_rest_hub_server.entity.User;
 import com.baomidou.mybatisplus.extension.service.IService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.constraints.NotBlank;
 
 /**
@@ -25,4 +28,18 @@ public interface UserService extends IService<User> {
      * @return 如果用户是管理员返回true，否则返回false
      */
     boolean isAdmin(Long userId);
+
+    /**
+    * 管理员登录方法
+    * @param loginRequest 登录请求对象，包含用户名和密码等信息
+    * @return LoginResponse 登录响应对象，包含登录结果和相关信息
+    */
+    LoginResponse adminLogin(LoginRequest loginRequest);
+
+    /**
+     * 管理员登出方法
+     * @param request
+     *
+     */
+    void adminLogOut(HttpServletRequest request);
 }

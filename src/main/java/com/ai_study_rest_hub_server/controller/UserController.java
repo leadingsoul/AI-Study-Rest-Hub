@@ -2,25 +2,16 @@ package com.ai_study_rest_hub_server.controller;
 
 
 import com.ai_study_rest_hub_server.common.Result;
-import com.ai_study_rest_hub_server.config.properties.JwtProperties;
-import com.ai_study_rest_hub_server.constant.JwtClaimsConstant;
 import com.ai_study_rest_hub_server.dto.LoginRequest;
 import com.ai_study_rest_hub_server.dto.LoginResponse;
-import com.ai_study_rest_hub_server.entity.User;
 import com.ai_study_rest_hub_server.service.UserService;
-import com.ai_study_rest_hub_server.utils.JwtUtil;
-import com.ai_study_rest_hub_server.vo.LoginRequestVo;
-import com.ai_study_rest_hub_server.vo.LoginResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
 
 
 /**
@@ -34,9 +25,7 @@ import java.util.UUID;
 @CrossOrigin(origins = "*")  // 允许跨域访问
 @Tag(name = "用户管理", description = "用户相关操作，包括登录认证、权限验证等功能")  // Swagger API分组
 public class UserController {
-
     private final UserService userService;
-    private final JwtProperties jwtProperties;
     /**
      * 用户登录
      * @param loginRequest 登录请求
@@ -45,36 +34,15 @@ public class UserController {
     @PostMapping("/login")  // 处理POST请求
     @Operation(summary = "用户登录", description = "用户通过用户名和密码进行登录验证，返回用户信息和token")  // API描述
     public Result<LoginResponse> login(@RequestBody LoginRequest loginRequest) {
-        // 验证参数
-        if (loginRequest.getUsername() == null || loginRequest.getUsername().isEmpty()) {
-            return Result.error("用户名不能为空");
-        }
-        if (loginRequest.getPassword() == null || loginRequest.getPassword().isEmpty()) {
-            return Result.error("密码不能为空");
-        }
-
-        // 执行登录
-        User user = userService.login(loginRequest.getUsername(), loginRequest.getPassword());
-        if (user == null) {
-            return Result.error("用户名或密码错误");
-        }
-        // 登录成功后，生成jwt令牌
-        Map<String, Object> claims = new HashMap<>();
-        claims.put(JwtClaimsConstant.USER_ID,user.getId());
-        String token = JwtUtil.createJWT(
-                jwtProperties.getAdminSecretKey(),
-                jwtProperties.getAdminTtl(),
-                claims
-        );
-        // 构建登录响应
-        LoginResponse response = new LoginResponse();
-        response.setUserId(user.getId());
-        response.setUsername(user.getUsername());
-        response.setRealName(user.getRealName());
-        response.setRole(user.getRole());
-        response.setToken(token);
-
+        LoginResponse response = userService.adminLogin(loginRequest);
         return Result.success(response);
+    }
+
+    @PostMapping("/logout")
+    @Operation(summary = "用户登出",description = "用户退出登录状态，删除redis中token信息")
+    public Result<Void> logout(HttpServletRequest request){
+        userService.adminLogOut(request);
+        return Result.success("登出成功");
     }
 
     /**
