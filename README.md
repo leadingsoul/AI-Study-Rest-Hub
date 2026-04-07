@@ -10,7 +10,7 @@ AI-Study-Rest-Hub/
 └─ AI_Study-Rest_Hub/AI_study_rest_hub_server/  # 后端服务（Spring Boot + MyBatis-Plus）
 ```
 
-## 一、前端（`front-end`）分析
+## 一、前端（`front-end`）
 
 `front-end` 目录为需要运行的资源，未完成构建
 
@@ -30,7 +30,7 @@ AI-Study-Rest-Hub/
 - 请求头自动携带 `Bearer Token`（从 `localStorage.userInfo.token` 读取）
 - 期望后端统一响应结构：`code === 200` 视为成功
 
-## 二、后端（`AI_study_rest_hub_server`）分析
+## 二、后端（`AI_study_rest_hub_server`）
 ## 技术栈
 
 - Java 17
@@ -97,7 +97,7 @@ mvn spring-boot:run
 - 建议在 Nginx 层配置 `/api` 反向代理到后端，避免跨域及硬编码地址问题
 - 登录后确保浏览器 `localStorage.userInfo.token` 存在，后端 JWT 拦截策略才会生效
 
-## 四、当前仓库注意事项
+## 四、注意事项
 
 - `application-dev.yml` 含有真实风格的数据库/Redis/AI/MinIO配置，请务必改为环境变量或私有配置文件管理
 - 当前目录中的前端是构建产物，不便直接修改业务代码；若需迭代功能，建议补充前端源码工程目录
